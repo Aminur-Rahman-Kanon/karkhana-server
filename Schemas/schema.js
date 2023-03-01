@@ -6,7 +6,11 @@ const registerSchema = {
     password: {type: String, required: true}
 }
 
+const products = {
+    featured: Object
+}
+
 
 module.exports = {
-    registerSchema
+    registerSchema, products
 }
