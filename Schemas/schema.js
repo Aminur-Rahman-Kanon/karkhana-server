@@ -3,7 +3,13 @@ const registerSchema = {
     lastName: {type: String, required: true},
     email: {type: String, required: true},
     phoneNumber: {type: String, required: true},
-    password: {type: String, required: true}
+    imgLink: String,
+    password: {type: String, required: true},
+    state: String,
+    city: String,
+    address: String,
+    zipcode: String,
+    thana: String,
 }
 
 const products = {

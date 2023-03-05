@@ -7,9 +7,14 @@ const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
 const bodyParser = require('body-parser');
 const multer = require('multer');
-app.use(express.json());
+// const formIdable = require('express-formidable');
+const fs = require('fs');
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(formIdable());
+
 const path = require('path');
 
 //schemas
@@ -24,15 +29,18 @@ const productsModel = mongoose.model('products', productSchema);
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         console.log(`des ${file}`);
-        cb(null, 'Images');
+        cb(null, 'Images/Users');
     },
     filename: (req, file, cb) => {
-        console.log(`file ${file}`);
+        console.log(req.body);
         cb(null, file.originalname)
     }
 })
 
-const upload = multer({storage: storage}).single('image')
+const upload = multer({storage: storage, limits: {
+    fileSize: 1024 * 1024
+} });
+
 
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
@@ -50,7 +58,6 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
-
     const userQuery = await registerModel.findOne({ email });
 
     if (!userQuery) return res.json({ status: 'user not found' })
@@ -65,15 +72,95 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.post('/upload', (req, res) => {
-    console.log(req.file);
-    upload(req, res, (err) => {
-        if (err) {
-            console.log(err);
-            res.send('error')
-        }
-        res.send(req.file);
-    })
+
+app.post('/update-profile', upload.single('avatar') ,async (req, res) => {
+
+    const userData = JSON.parse(req.body.data);
+    const email = userData.email;
+
+    //Not necessary but maybe
+    if (!email) return res.json({ status: 'email not provided' });
+    
+    //change filename
+    if (req.file) {
+        const fileNames = req.file.originalname;
+        // const fileName = fileNames.split('.')[0]
+        const fileExt = fileNames.split('.')[1]
+        
+        fs.rename(`Images/Users/${fileNames}`, `Images/Users/${email}.${fileExt}`, (err) => {
+            if (err) return res,json({ status: 'file upload error' });
+        })
+
+        //update the database with the img link
+        await registerModel.collection.updateOne({
+            email: email
+        }, {
+            $set: {
+                imgLink: userData.imgLink
+            }
+        }).then(result => console.log(result)).catch(err => console.log(err))
+    }
+    
+    //update user information
+    const user = await registerModel.findOne({ email });
+
+    if (!user) return res.json({ status: 'email not found' })
+
+    if (userData.newpassword){
+        //update everything with password
+        const passwordMatch = await bcrypt.compare(userData.currentpassword, user.password)
+        
+        if (!passwordMatch) return res.json({ status: 'invalid password' });
+
+        const newPassword = await bcrypt.hash(userData.newpassword, salt);
+
+        registerModel.collection.updateMany({
+            email: email
+        }, {
+            $set: {
+                firstName: userData.firstname,
+                lastName: userData.lastname,
+                phoneNumber: userData.phonenumber,
+                password: newPassword,
+                state: userData.state,
+                city: userData.city,
+                address: userData.address,
+                zipcode: userData.zipcode,
+                thana: userData.thana
+            }
+        }).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'error' }));
+    }
+    else {
+        //update everything except password
+        registerModel.collection.updateMany({
+            email: email
+        }, {
+            $set: {
+                firstName: userData.firstname,
+                lastName: userData.lastname,
+                phoneNumber: userData.phonenumber,
+                state: userData.state,
+                city: userData.city,
+                address: userData.address,
+                zipcode: userData.zipcode,
+                thana: userData.thana
+            }
+        }).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'errpr' }))
+    }
+})
+
+app.post('/redirect-user', async (req, res) => {
+    const {email} = req.body;
+    console.log(email);
+    const user = await registerModel.findOne({ email });
+    console.log(user);
+
+    if (!user) {
+        return res.json({ status: 'error' });
+    }
+    
+    return res.json({ status: 'success', user: user });
+
 })
 
 app.get('/featured-products', (req, res) => {
