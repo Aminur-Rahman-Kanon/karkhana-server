@@ -7,13 +7,11 @@ const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
 const bodyParser = require('body-parser');
 const multer = require('multer');
-// const formIdable = require('express-formidable');
 const fs = require('fs');
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(formIdable());
 
 const path = require('path');
 
@@ -23,13 +21,13 @@ const productSchema = require('./Schemas/schema').products;
 
 //model
 const registerModel = mongoose.model('registeredUser', registerSchema);
-const productsModel = mongoose.model('products', productSchema);
+const productsModel = mongoose.model('featuredProducts', productSchema);
 
 //multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         console.log(`des ${file}`);
-        cb(null, 'Images/Users');
+        cb(null, 'public/assets/users');
     },
     filename: (req, file, cb) => {
         console.log(req.body);
@@ -41,6 +39,14 @@ const upload = multer({storage: storage, limits: {
     fileSize: 1024 * 1024
 } });
 
+
+app.get('/featuredProducts', async (req, res) => {
+    const data = await productsModel.find({});
+
+    if (!data) return res.json({ status: 'database not responded' });
+    
+    res.json({ status: 'success', data:data })
+})
 
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
@@ -87,7 +93,7 @@ app.post('/update-profile', upload.single('avatar') ,async (req, res) => {
         // const fileName = fileNames.split('.')[0]
         const fileExt = fileNames.split('.')[1]
         
-        fs.rename(`Images/Users/${fileNames}`, `Images/Users/${email}.${fileExt}`, (err) => {
+        fs.rename(`public/assets/users/${fileNames}`, `public/assets/users/${email}.${fileExt}`, (err) => {
             if (err) return res,json({ status: 'file upload error' });
         })
 
@@ -167,7 +173,7 @@ app.get('/featured-products', (req, res) => {
     productsModel.find({}, {_id: 0, featured: 1}).then(result => res.json({ status: 'success', products: result[0] })).catch(err => console.log(err));
 })
 
-app.use(express.static('Images'));
+app.use(express.static('public'));
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -175,13 +181,12 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(res => console.log('database connected')).catch(err => console.log(err));
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('Images'))
+    app.use(express.static('public'))
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
+    // app.get('*', (req, res) => {
+    //     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    // })
 }
-
 
 const port = process.env.PORT
 

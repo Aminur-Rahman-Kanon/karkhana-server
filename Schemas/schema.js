@@ -13,7 +13,8 @@ const registerSchema = {
 }
 
 const products = {
-    featured: Object
+    name: String,
+    img: String
 }
 
 
