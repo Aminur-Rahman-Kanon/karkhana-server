@@ -22,6 +22,7 @@ const productSchema = require('./Schemas/schema').products;
 //model
 const registerModel = mongoose.model('registeredUser', registerSchema);
 const productsModel = mongoose.model('featuredProducts', productSchema);
+const earRingsModel = mongoose.model('earRings', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -46,6 +47,24 @@ app.get('/featuredProducts', async (req, res) => {
     if (!data) return res.json({ status: 'database not responded' });
     
     res.json({ status: 'success', data:data })
+})
+
+app.get('/products/:productId', async (req, res) => {
+    const product = req.params;
+
+    if (product.hasOwnProperty('productId')){
+        const productId = product.productId;
+        
+        switch(productId) {
+            case "earRings":
+                const data = await earRingsModel.find({});
+                if (!data) return res.json({ status: 'database not responded' })
+                return res.json({ status: 'success', data: data });
+
+            default:
+                return res.json({ status: 'not found' })
+        }
+    }
 })
 
 app.post('/register', async (req, res) => {
@@ -187,6 +206,41 @@ if (process.env.NODE_ENV === 'production') {
     //     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     // })
 }
+
+
+// const t = [
+//     {name: 'Ear Ring 1', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing1.png', price: 1000}
+//     ,
+//     {name: 'Ear Ring 2', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing2.png', price: 1100}
+//     ,
+//     {name: 'Ear Ring 3', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing3.png', price: 1200}
+//     , 
+//     {name: 'Ear Ring 4', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing4.png', price: 1300}
+//     , 
+//     {name: 'Ear Ring 5', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing5.png', price: 1400}
+//     , 
+//     {name: 'Ear Ring 6', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing6.png', price: 1500}
+//     , 
+//     {name: 'Ear Ring 7', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing7.png', price: 1600}
+//     , 
+//     {name: 'Ear Ring 8', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing8.png', price: 1700}
+//     , 
+//     {name: 'Ear Ring 9', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing9.png', price: 1100}
+//     , 
+//     {name: 'Ear Ring 10', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing10.png', price: 1500}
+//     , 
+//     {name: 'Ear Ring 11', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing11.png', price: 1300}
+//     ,
+//     {name: 'Ear Ring 12', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing12.png', price: 1900}
+// ]
+
+// t.map(async item => {
+//     return await testModel.create({
+//         name: item.name,
+//         img: item.img,
+//         price: item.price
+//     })
+// })
 
 const port = process.env.PORT
 

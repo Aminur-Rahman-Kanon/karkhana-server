@@ -14,7 +14,8 @@ const registerSchema = {
 
 const products = {
     name: String,
-    img: String
+    img: String,
+    price: String
 }
 
 
