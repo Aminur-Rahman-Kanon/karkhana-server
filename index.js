@@ -27,7 +27,8 @@ const fingerRingsModel = mongoose.model('fingerRings', productSchema);
 const necklaceModel = mongoose.model('necklace', productSchema);
 const braceletModel = mongoose.model('bracelet', productSchema);
 const toeRingsModel = mongoose.model('toeRings', productSchema);
-const othersModel = mongoose.model('others', productSchema);
+const nepaliModel = mongoose.model('nepali', productSchema);
+const comboModel = mongoose.model('combo', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -87,6 +88,16 @@ app.get('/products/:productId', async (req, res) => {
                 const necklace = await necklaceModel.find({});
                 if (!necklace) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: necklace })
+
+            case "nepali":
+                const nepali = await nepaliModel.find({});
+                if (!nepali) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: nepali })
+
+            case "combo":
+                const combo = await necklaceModel.find({});
+                if (!combo) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: combo })
 
             case "others":
                 const others = await othersModel.find({});
@@ -239,35 +250,52 @@ if (process.env.NODE_ENV === 'production') {
     // })
 }
 
-
 // const t = [
-//     {name: 'Others 1', img: 'https://karkhana-server.onrender.com/assets/products/others/others1.jpg', price: 1000}
+//     {name: 'Combo 1', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo1.jpg', price: 1000}
 //     ,
-//     {name: 'Others 2', img: 'https://karkhana-server.onrender.com/assets/products/others/others2.jpg', price: 1100}
+//     {name: 'Combo 2', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo2.jpg', price: 1100}
 //     ,
-//     {name: 'Others 3', img: 'https://karkhana-server.onrender.com/assets/products/others/others3.jpg', price: 1200}
+//     {name: 'Combo 3', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo3.jpg', price: 1200}
 //     , 
-//     {name: 'Others 4', img: 'https://karkhana-server.onrender.com/assets/products/others/others4.jpg', price: 1300}
+//     {name: 'Combo 4', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo4.jpg', price: 1300}
 //     , 
-//     {name: 'Others 5', img: 'https://karkhana-server.onrender.com/assets/products/others/others5.jpg', price: 1400}
+//     {name: 'Combo 5', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo5.jpg', price: 1400}
 //     , 
-//     {name: 'Others 6', img: 'https://karkhana-server.onrender.com/assets/products/others/others6.jpg', price: 1500}
+//     {name: 'Combo 6', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo6.jpg', price: 1500}
 //     , 
-//     {name: 'Others 7', img: 'https://karkhana-server.onrender.com/assets/products/others/others7.jpg', price: 1600}
+//     {name: 'Combo 7', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo7.jpg', price: 1600}
 //     , 
-//     {name: 'Others 8', img: 'https://karkhana-server.onrender.com/assets/products/others/others8.jpg', price: 1700}
+//     {name: 'Combo 8', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo8.jpg', price: 1700}
 //     , 
-//     {name: 'Others 9', img: 'https://karkhana-server.onrender.com/assets/products/others/others9.jpg', price: 1100}
+//     {name: 'Combo 9', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo9.jpg', price: 1100}
 //     , 
-//     {name: 'Others 10', img: 'https://karkhana-server.onrender.com/assets/products/others/others10.jpg', price: 1500}
+//     {name: 'Combo 10', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo10.jpg', price: 1500}
 //     , 
-//     {name: 'Others 11', img: 'https://karkhana-server.onrender.com/assets/products/others/others11.jpg', price: 1300}
+//     {name: 'Combo 11', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo11.jpg', price: 1300}
 //     ,
-//     {name: 'Others 12', img: 'https://karkhana-server.onrender.com/assets/products/others/others12.jpg', price: 1900}
+//     {name: 'Combo 12', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo12.jpg', price: 1900}
+//     ,
+//     {name: 'Combo 13', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo13.jpg', price: 2000}
+//     ,
+//     {name: 'Combo 14', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo14.jpg', price: 1100}
+//     ,
+//     {name: 'Combo 15', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo15.jpg', price: 1600}
+//     ,
+//     {name: 'Combo 16', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo16.jpg', price: 1300}
+//     ,
+//     {name: 'Combo 17', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo17.jpg', price: 1500}
+//     ,
+//     {name: 'Combo 18', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo18.jpg', price: 1200}
+//     ,
+//     {name: 'Combo 19', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo19.jpg', price: 1900}
+//     ,
+//     {name: 'Combo 20', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo20.jpg', price: 2500}
+//     ,
+//     {name: 'Combo 21', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo21.jpg', price: 3000}
 // ]
 
 // t.map(async item => {
-//     return await othersModel.create({
+//     return await comboModel.create({
 //         name: item.name,
 //         img: item.img,
 //         price: item.price
