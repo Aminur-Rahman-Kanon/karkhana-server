@@ -23,6 +23,11 @@ const productSchema = require('./Schemas/schema').products;
 const registerModel = mongoose.model('registeredUser', registerSchema);
 const productsModel = mongoose.model('featuredProducts', productSchema);
 const earRingsModel = mongoose.model('earRings', productSchema);
+const fingerRingsModel = mongoose.model('fingerRings', productSchema);
+const necklaceModel = mongoose.model('necklace', productSchema);
+const braceletModel = mongoose.model('bracelet', productSchema);
+const toeRingsModel = mongoose.model('toeRings', productSchema);
+const othersModel = mongoose.model('others', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -54,15 +59,42 @@ app.get('/products/:productId', async (req, res) => {
 
     if (product.hasOwnProperty('productId')){
         const productId = product.productId;
+
+        console.log(productId);
         
         switch(productId) {
-            case "earRings":
-                const data = await earRingsModel.find({});
-                if (!data) return res.json({ status: 'database not responded' })
-                return res.json({ status: 'success', data: data });
+            case "ear-rings":
+                const earRing = await earRingsModel.find({});
+                if (!earRing) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: earRing });
+
+            case "finger-rings":
+                const fingerRing = await fingerRingsModel.find({});
+                if (!fingerRing) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: fingerRing });
+
+            case "toe-rings":
+                const toeRing = await toeRingsModel.find({});
+                if (!toeRing) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: toeRing })
+
+            case "bracelet":
+                const bracelet = await braceletModel.find({});
+                if (!bracelet) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: bracelet })
+
+            case "necklace":
+                const necklace = await necklaceModel.find({});
+                if (!necklace) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: necklace })
+
+            case "others":
+                const others = await othersModel.find({});
+                if (!others) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: others })
 
             default:
-                return res.json({ status: 'not found' })
+                return res.json({ status: 'not found' });
         }
     }
 })
@@ -209,33 +241,33 @@ if (process.env.NODE_ENV === 'production') {
 
 
 // const t = [
-//     {name: 'Ear Ring 1', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing1.png', price: 1000}
+//     {name: 'Others 1', img: 'https://karkhana-server.onrender.com/assets/products/others/others1.jpg', price: 1000}
 //     ,
-//     {name: 'Ear Ring 2', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing2.png', price: 1100}
+//     {name: 'Others 2', img: 'https://karkhana-server.onrender.com/assets/products/others/others2.jpg', price: 1100}
 //     ,
-//     {name: 'Ear Ring 3', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing3.png', price: 1200}
+//     {name: 'Others 3', img: 'https://karkhana-server.onrender.com/assets/products/others/others3.jpg', price: 1200}
 //     , 
-//     {name: 'Ear Ring 4', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing4.png', price: 1300}
+//     {name: 'Others 4', img: 'https://karkhana-server.onrender.com/assets/products/others/others4.jpg', price: 1300}
 //     , 
-//     {name: 'Ear Ring 5', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing5.png', price: 1400}
+//     {name: 'Others 5', img: 'https://karkhana-server.onrender.com/assets/products/others/others5.jpg', price: 1400}
 //     , 
-//     {name: 'Ear Ring 6', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing6.png', price: 1500}
+//     {name: 'Others 6', img: 'https://karkhana-server.onrender.com/assets/products/others/others6.jpg', price: 1500}
 //     , 
-//     {name: 'Ear Ring 7', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing7.png', price: 1600}
+//     {name: 'Others 7', img: 'https://karkhana-server.onrender.com/assets/products/others/others7.jpg', price: 1600}
 //     , 
-//     {name: 'Ear Ring 8', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing8.png', price: 1700}
+//     {name: 'Others 8', img: 'https://karkhana-server.onrender.com/assets/products/others/others8.jpg', price: 1700}
 //     , 
-//     {name: 'Ear Ring 9', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing9.png', price: 1100}
+//     {name: 'Others 9', img: 'https://karkhana-server.onrender.com/assets/products/others/others9.jpg', price: 1100}
 //     , 
-//     {name: 'Ear Ring 10', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing10.png', price: 1500}
+//     {name: 'Others 10', img: 'https://karkhana-server.onrender.com/assets/products/others/others10.jpg', price: 1500}
 //     , 
-//     {name: 'Ear Ring 11', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing11.png', price: 1300}
+//     {name: 'Others 11', img: 'https://karkhana-server.onrender.com/assets/products/others/others11.jpg', price: 1300}
 //     ,
-//     {name: 'Ear Ring 12', img: 'https://karkhana-server.onrender.com/assets/products/earRings/earRing12.png', price: 1900}
+//     {name: 'Others 12', img: 'https://karkhana-server.onrender.com/assets/products/others/others12.jpg', price: 1900}
 // ]
 
 // t.map(async item => {
-//     return await testModel.create({
+//     return await othersModel.create({
 //         name: item.name,
 //         img: item.img,
 //         price: item.price
