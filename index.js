@@ -29,6 +29,7 @@ const braceletModel = mongoose.model('bracelet', productSchema);
 const toeRingsModel = mongoose.model('toeRings', productSchema);
 const nepaliModel = mongoose.model('nepali', productSchema);
 const comboModel = mongoose.model('combo', productSchema);
+const othersModel = mongoose.model('other', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -59,9 +60,7 @@ app.get('/products/:productId', async (req, res) => {
     const product = req.params;
 
     if (product.hasOwnProperty('productId')){
-        const productId = product.productId;
-
-        console.log(productId);
+        const productId = product.productId;y
         
         switch(productId) {
             case "ear-rings":
@@ -95,7 +94,7 @@ app.get('/products/:productId', async (req, res) => {
                 return res.json({ status: 'success', data: nepali })
 
             case "combo":
-                const combo = await necklaceModel.find({});
+                const combo = await comboModel.find({});
                 if (!combo) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: combo })
 
