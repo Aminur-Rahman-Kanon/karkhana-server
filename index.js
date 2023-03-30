@@ -60,7 +60,7 @@ app.get('/products/:productId', async (req, res) => {
     const product = req.params;
 
     if (product.hasOwnProperty('productId')){
-        const productId = product.productId;y
+        const productId = product.productId;
         
         switch(productId) {
             case "ear-rings":
