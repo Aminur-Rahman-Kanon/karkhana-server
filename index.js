@@ -109,6 +109,59 @@ app.get('/products/:productId', async (req, res) => {
     }
 })
 
+app.get('/product-details/:productId/:productDetails', async (req, res) => {
+    
+    const productsPool = ['bracelet', 'necklace', 'finger-rings', 'ear-rings', 'toe-rings', 'nepali', 'combo', 'others'];
+    const { productId, productDetails } = req.params;
+    
+    if (!productsPool.includes(productId)) return res.json({ status: 'invalid request' });
+
+    switch(productId) {
+        case "ear-rings":
+            const earRing = await earRingsModel.find({ name: productDetails });
+            if (!earRing) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: earRing });
+
+        case "finger-rings":
+            const fingerRing = await fingerRingsModel.find({ name: productDetails });
+            if (!fingerRing) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: fingerRing });
+
+        case "toe-rings":
+            const toeRing = await toeRingsModel.find({ name: productDetails });
+            if (!toeRing) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: toeRing })
+
+        case "bracelet":
+            const bracelet = await braceletModel.find({ name: productDetails });
+            if (!bracelet) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: bracelet })
+
+        case "necklace":
+            const necklace = await necklaceModel.find({ name: productDetails });
+            if (!necklace) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: necklace })
+
+        case "nepali":
+            const nepali = await nepaliModel.find({ name: productDetails });
+            if (!nepali) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: nepali })
+
+        case "combo":
+            const combo = await comboModel.find({ name: productDetails });
+            if (!combo) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: combo })
+
+        case "others":
+            const others = await othersModel.find({ name: productDetails });
+            if (!others) return res.json({ status: 'not found' });
+            return res.json({ status: 'success', data: others })
+
+        default:
+            return res.json({ status: 'not found' });
+    }
+})
+
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
     const existUser = await registerModel.findOne({email});
