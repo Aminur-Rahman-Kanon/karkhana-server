@@ -15,8 +15,10 @@ const registerSchema = {
 const products = {
     name: String,
     img: String,
-    price: String
+    price: String,
+    details: String
 }
+
 
 
 module.exports = {

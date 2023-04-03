@@ -30,6 +30,7 @@ const toeRingsModel = mongoose.model('toeRings', productSchema);
 const nepaliModel = mongoose.model('nepali', productSchema);
 const comboModel = mongoose.model('combo', productSchema);
 const othersModel = mongoose.model('other', productSchema);
+const exclusiveModel = mongoose.model('exclusive', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -47,13 +48,14 @@ const upload = multer({storage: storage, limits: {
     fileSize: 1024 * 1024
 } });
 
-
 app.get('/featuredProducts', async (req, res) => {
-    const data = await productsModel.find({});
+    const featured = await productsModel.find({});
 
-    if (!data) return res.json({ status: 'database not responded' });
+    const exclusive = await exclusiveModel.find({});
+
+    if (!featured || !exclusive) return res.json({ status: 'database not responded' });
     
-    res.json({ status: 'success', data:data })
+    res.json({ status: 'success', data:{ featured: featured, exclusive: exclusive } })
 })
 
 app.get('/products/:productId', async (req, res) => {
@@ -102,6 +104,19 @@ app.get('/products/:productId', async (req, res) => {
                 const others = await othersModel.find({});
                 if (!others) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: others })
+            
+            case "featured":
+                const featured = await productsModel.find({});
+                console.log(featured);
+                if (!featured) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: featured });
+
+            case "exclusive":
+                const exclusive = await exclusiveModel.find({});
+                const products = await othersModel.find({});
+                const totalItem = exclusive.concat(products);
+                if (!exclusive || !products) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: totalItem })
 
             default:
                 return res.json({ status: 'not found' });
@@ -109,58 +124,58 @@ app.get('/products/:productId', async (req, res) => {
     }
 })
 
-app.get('/product-details/:productId/:productDetails', async (req, res) => {
+// app.get('/product-details/:productId/:productDetails', async (req, res) => {
     
-    const productsPool = ['bracelet', 'necklace', 'finger-rings', 'ear-rings', 'toe-rings', 'nepali', 'combo', 'others'];
-    const { productId, productDetails } = req.params;
+//     const productsPool = ['bracelet', 'necklace', 'finger-rings', 'ear-rings', 'toe-rings', 'nepali', 'combo', 'others'];
+//     const { productId, productDetails } = req.params;
     
-    if (!productsPool.includes(productId)) return res.json({ status: 'invalid request' });
+//     if (!productsPool.includes(productId)) return res.json({ status: 'invalid request' });
 
-    switch(productId) {
-        case "ear-rings":
-            const earRing = await earRingsModel.find({ name: productDetails });
-            if (!earRing) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: earRing });
+//     switch(productId) {
+//         case "ear-rings":
+//             const earRing = await earRingsModel.find({ name: productDetails });
+//             if (!earRing) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: earRing });
 
-        case "finger-rings":
-            const fingerRing = await fingerRingsModel.find({ name: productDetails });
-            if (!fingerRing) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: fingerRing });
+//         case "finger-rings":
+//             const fingerRing = await fingerRingsModel.find({ name: productDetails });
+//             if (!fingerRing) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: fingerRing });
 
-        case "toe-rings":
-            const toeRing = await toeRingsModel.find({ name: productDetails });
-            if (!toeRing) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: toeRing })
+//         case "toe-rings":
+//             const toeRing = await toeRingsModel.find({ name: productDetails });
+//             if (!toeRing) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: toeRing })
 
-        case "bracelet":
-            const bracelet = await braceletModel.find({ name: productDetails });
-            if (!bracelet) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: bracelet })
+//         case "bracelet":
+//             const bracelet = await braceletModel.find({ name: productDetails });
+//             if (!bracelet) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: bracelet })
 
-        case "necklace":
-            const necklace = await necklaceModel.find({ name: productDetails });
-            if (!necklace) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: necklace })
+//         case "necklace":
+//             const necklace = await necklaceModel.find({ name: productDetails });
+//             if (!necklace) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: necklace })
 
-        case "nepali":
-            const nepali = await nepaliModel.find({ name: productDetails });
-            if (!nepali) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: nepali })
+//         case "nepali":
+//             const nepali = await nepaliModel.find({ name: productDetails });
+//             if (!nepali) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: nepali })
 
-        case "combo":
-            const combo = await comboModel.find({ name: productDetails });
-            if (!combo) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: combo })
+//         case "combo":
+//             const combo = await comboModel.find({ name: productDetails });
+//             if (!combo) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: combo })
 
-        case "others":
-            const others = await othersModel.find({ name: productDetails });
-            if (!others) return res.json({ status: 'not found' });
-            return res.json({ status: 'success', data: others })
+//         case "others":
+//             const others = await othersModel.find({ name: productDetails });
+//             if (!others) return res.json({ status: 'not found' });
+//             return res.json({ status: 'success', data: others })
 
-        default:
-            return res.json({ status: 'not found' });
-    }
-})
+//         default:
+//             return res.json({ status: 'not found' });
+//     }
+// })
 
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
