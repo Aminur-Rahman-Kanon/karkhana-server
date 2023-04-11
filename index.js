@@ -25,7 +25,7 @@ const productSchema = require('./Schemas/schema').products;
 
 //model
 const registerModel = mongoose.model('registeredUser', registerSchema);
-const productsModel = mongoose.model('featuredProducts', productSchema);
+const featuredModel = mongoose.model('featuredProducts', productSchema);
 const earRingsModel = mongoose.model('earRings', productSchema);
 const fingerRingsModel = mongoose.model('fingerRings', productSchema);
 const necklaceModel = mongoose.model('necklace', productSchema);
@@ -35,6 +35,8 @@ const nepaliModel = mongoose.model('nepali', productSchema);
 const comboModel = mongoose.model('combo', productSchema);
 const othersModel = mongoose.model('other', productSchema);
 const exclusiveModel = mongoose.model('exclusive', productSchema);
+const trendingModel = mongoose.model('trending', productSchema);
+const topSellerModel = mongoose.model('topSeller', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -52,15 +54,6 @@ const upload = multer({storage: storage, limits: {
     fileSize: 1024 * 1024
 } });
 
-app.get('/featuredProducts', async (req, res) => {
-    const featured = await productsModel.find({});
-
-    const exclusive = await exclusiveModel.find({});
-
-    if (!featured || !exclusive) return res.json({ status: 'database not responded' });
-    
-    res.json({ status: 'success', data:{ featured: featured, exclusive: exclusive } })
-})
 
 app.get('/products/:productId', async (req, res) => {
     const product = req.params;
@@ -69,6 +62,15 @@ app.get('/products/:productId', async (req, res) => {
         const productId = product.productId;
         
         switch(productId) {
+            case 'initial-display':
+                const featured = await featuredModel.find({});
+                const exclusive = await exclusiveModel.find({});
+                const trending = await trendingModel.find({});
+                const topSeller = await topSellerModel.find({});
+
+                // if (!featured || !exclusive) return res.json({ status: 'database not responded' });
+                return res.json({ status: 'success', data:{ featured, exclusive, trending, topSeller } })
+
             case "ear-rings":
                 const earRing = await earRingsModel.find({});
                 if (!earRing) return res.json({ status: 'database error' });
@@ -110,15 +112,15 @@ app.get('/products/:productId', async (req, res) => {
                 return res.json({ status: 'success', data: others })
             
             case "featured":
-                const featured = await productsModel.find({});
+                const featuredProducts = await featuredModel.find({});
                 console.log(featured);
                 if (!featured) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: featured });
+                return res.json({ status: 'success', data: featuredProducts });
 
             case "exclusive":
-                const exclusive = await exclusiveModel.find({});
+                const exclusiveProducts = await exclusiveModel.find({});
                 const products = await othersModel.find({});
-                const totalItem = exclusive.concat(products);
+                const totalItem = exclusiveProducts.concat(products);
                 if (!exclusive || !products) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: totalItem })
 
@@ -334,9 +336,9 @@ app.post('/redirect-user', async (req, res) => {
 
 })
 
-app.get('/featured-products', (req, res) => {
-    productsModel.find({}, {_id: 0, featured: 1}).then(result => res.json({ status: 'success', products: result[0] })).catch(err => console.log(err));
-})
+// app.get('/featured-products', (req, res) => {
+//     featuredModel.find({}, {_id: 0, featured: 1}).then(result => res.json({ status: 'success', products: result[0] })).catch(err => console.log(err));
+// })
 
 app.use(express.static('public'));
 
@@ -353,52 +355,34 @@ if (process.env.NODE_ENV === 'production') {
     // })
 }
 
-// const t = [
-//     {name: 'Combo 1', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo1.jpg', price: 1000}
-//     ,
-//     {name: 'Combo 2', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo2.jpg', price: 1100}
-//     ,
-//     {name: 'Combo 3', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo3.jpg', price: 1200}
+// const t = [ 
+//     {name: 'Top seller 1', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller1.jpg', price: 1500}
 //     , 
-//     {name: 'Combo 4', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo4.jpg', price: 1300}
-//     , 
-//     {name: 'Combo 5', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo5.jpg', price: 1400}
-//     , 
-//     {name: 'Combo 6', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo6.jpg', price: 1500}
-//     , 
-//     {name: 'Combo 7', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo7.jpg', price: 1600}
-//     , 
-//     {name: 'Combo 8', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo8.jpg', price: 1700}
-//     , 
-//     {name: 'Combo 9', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo9.jpg', price: 1100}
-//     , 
-//     {name: 'Combo 10', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo10.jpg', price: 1500}
-//     , 
-//     {name: 'Combo 11', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo11.jpg', price: 1300}
+//     {name: 'Top seller 2', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller2.jpg', price: 1300}
 //     ,
-//     {name: 'Combo 12', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo12.jpg', price: 1900}
+//     {name: 'Top seller 3', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller3.jpg', price: 1900}
 //     ,
-//     {name: 'Combo 13', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo13.jpg', price: 2000}
+//     {name: 'Top seller 4', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller4.jpg', price: 2000}
 //     ,
-//     {name: 'Combo 14', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo14.jpg', price: 1100}
+//     {name: 'Top seller 5', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller5.jpg', price: 1100}
 //     ,
-//     {name: 'Combo 15', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo15.jpg', price: 1600}
+//     {name: 'Top seller 6', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller6.jpg', price: 1600}
 //     ,
-//     {name: 'Combo 16', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo16.jpg', price: 1300}
+//     {name: 'Top seller 7', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller7.jpg', price: 1300}
 //     ,
-//     {name: 'Combo 17', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo17.jpg', price: 1500}
+//     {name: 'Top seller 8', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller8.jpg', price: 1500}
 //     ,
-//     {name: 'Combo 18', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo18.jpg', price: 1200}
+//     {name: 'Top seller 9', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller9.jpg', price: 1200}
 //     ,
-//     {name: 'Combo 19', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo19.jpg', price: 1900}
+//     {name: 'Top seller 10', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller10.jpg', price: 1900}
 //     ,
-//     {name: 'Combo 20', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo20.jpg', price: 2500}
+//     {name: 'Top seller 11', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller11.jpg', price: 2500}
 //     ,
-//     {name: 'Combo 21', img: 'https://karkhana-server.onrender.com/assets/products/combo/combo21.jpg', price: 3000}
+//     {name: 'Top seller 12', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller12.jpg', price: 3000}
 // ]
 
 // t.map(async item => {
-//     return await comboModel.create({
+//     return await topSellerModel.create({
 //         name: item.name,
 //         img: item.img,
 //         price: item.price
