@@ -12,6 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const jwt = require('jsonwebtoken');
+const nodeMailer = require('nodemailer');
+app.set('views', './public/views');
+app.set('view engine', 'ejs');
 
 const path = require('path');
 
@@ -124,59 +128,6 @@ app.get('/products/:productId', async (req, res) => {
     }
 })
 
-// app.get('/product-details/:productId/:productDetails', async (req, res) => {
-    
-//     const productsPool = ['bracelet', 'necklace', 'finger-rings', 'ear-rings', 'toe-rings', 'nepali', 'combo', 'others'];
-//     const { productId, productDetails } = req.params;
-    
-//     if (!productsPool.includes(productId)) return res.json({ status: 'invalid request' });
-
-//     switch(productId) {
-//         case "ear-rings":
-//             const earRing = await earRingsModel.find({ name: productDetails });
-//             if (!earRing) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: earRing });
-
-//         case "finger-rings":
-//             const fingerRing = await fingerRingsModel.find({ name: productDetails });
-//             if (!fingerRing) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: fingerRing });
-
-//         case "toe-rings":
-//             const toeRing = await toeRingsModel.find({ name: productDetails });
-//             if (!toeRing) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: toeRing })
-
-//         case "bracelet":
-//             const bracelet = await braceletModel.find({ name: productDetails });
-//             if (!bracelet) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: bracelet })
-
-//         case "necklace":
-//             const necklace = await necklaceModel.find({ name: productDetails });
-//             if (!necklace) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: necklace })
-
-//         case "nepali":
-//             const nepali = await nepaliModel.find({ name: productDetails });
-//             if (!nepali) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: nepali })
-
-//         case "combo":
-//             const combo = await comboModel.find({ name: productDetails });
-//             if (!combo) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: combo })
-
-//         case "others":
-//             const others = await othersModel.find({ name: productDetails });
-//             if (!others) return res.json({ status: 'not found' });
-//             return res.json({ status: 'success', data: others })
-
-//         default:
-//             return res.json({ status: 'not found' });
-//     }
-// })
-
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
     const existUser = await registerModel.findOne({email});
@@ -207,6 +158,91 @@ app.post('/login', async (req, res) => {
     }
 })
 
+app.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    const userCheck = await registerModel.findOne({ email });
+    if (!userCheck) return res.json({ status: 'user not found' })
+
+    const token = jwt.sign({ id: userCheck._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+
+    const link = `https://karkhana-server.onrender.com/reset-password/${userCheck._id}/${token}`;
+
+    try {
+        const transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'karkhanawebservice@gmail.com',
+              pass: 'ivlqywmzjmhbjzeo'
+            }
+        });
+        
+        const mailOptions = {
+        from: 'youremail@gmail.com',
+        to: email,
+        subject: 'Reseting the password',
+        text: `Here is the link to reset your password. Please note that this link is valid for 5 minutes. After 5 minutes it will not work, then you have to try again.
+        \n${link}`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+        });
+
+        return res.json({ status: 'success' })
+        
+    } catch (error) {
+        return res.json({ status: 'failed' })
+    }
+})
+
+app.get('/reset-password/:id/:token', async (req, res) => {
+    const { id, token } = req.params;
+    
+    const userCheck = await registerModel.findOne({ _id: id });
+    if (!userCheck) return res.json({ status: 'user not found' });
+
+    try {
+        const verify = jwt.verify(token, process.env.JWT_SECRET);
+        res.render('index', {email: userCheck.email})
+    } catch (error) {
+        res.send("Link expired. Please try again")
+    }
+})
+
+app.post('/reset-password/:id/:token', async (req, res) => {
+    const { id, token } = req.params;
+
+    const {password, confirmPassword} = req.body;
+    
+    const userCheck = await registerModel.findOne({ _id: id });
+
+    if (!userCheck) return res.json({ status: 'user not found' });
+
+    try {
+        const verify = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(verify);
+        const encryptedPassword = await bcrypt.hash(password, salt);
+        await registerModel.updateOne({
+            _id: id
+        },
+        {
+            $set: {
+                password: encryptedPassword
+            }
+        })
+        res.render("success");
+        
+    } catch (error) {
+        res.json({ status: 'something went wrong' })
+    }
+})
 
 app.post('/update-profile', upload.single('avatar') ,async (req, res) => {
 

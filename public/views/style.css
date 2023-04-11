@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.password-reset-container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-container {
+    width: 150px;
+    height: 150px;
+    margin: 30px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d0b09b;
+}
+
+.logo {
+    width: 90%;
+    object-fit: cover;
+}
+
+.password-reset-heading {
+    font-size: 16px;
+    margin: 30px auto;
+    font-weight: 500;
+    text-align: center;
+}
+
+.reset-form {
+    width: 70%;
+    margin: 30px auto;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-container {
+    position: relative;
+    width: 90%;
+    height: 35px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.label {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    font-size: 12px;
+    padding: 0 5px;
+    background-color: white;
+    transition: all 0.3s ease-out;
+    opacity: 0;
+}
+
+.label.activeLabel {
+    opacity: 1;
+    top: -10px;
+}
+
+.input {
+    width: 98%;
+    height: 30px;
+    padding-left: 10px;
+    border: none;
+    outline: none;
+    background-color: white;
+}
+
+.submit-btn {
+    width: 300px;
+    height: 40px;
+    border: 1px solid #d0b09b;
+    background-color: #d0b09b;
+    color: white;
+    border-radius: 5px;
+    margin: 20px auto;
+    opacity: 0.8;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-btn:hover {
+    opacity: 1;
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.success-container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+.success-header-h3 {
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+}
+
+@media (max-width: 550px) {
+    .reset-form, .submit-btn {
+        width: 90%;
+    }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="/views/style.css"/>
+</head>
+<body>
+    <section class="password-reset-container">
+        <div class="logo-container">
+            <img src="/views/logo.jpg" class="logo"/>
+        </div>
+        <h2 class="password-reset-heading">Enter a new password for <%=email%></h2>
+        <form action="" method="post" class="reset-form">
+            <div class="input-container">
+                <input type="password"
+                       class="input"
+                       id="input1"
+                       name="password"
+                       placeholder="Enter new password"
+                       oninput="handleInput(event, 0)"
+                       onfocus="focusElement(0)"
+                       onblur="leaveFocus(0)"/>
+                <div class="label">New Password</div>
+            </div>
+            
+            <div class="input-container">
+                <input type="password"
+                       class="input"
+                       id="input2"
+                       name="confirmPassword"
+                       placeholder="Confirm password"
+                       oninput="handleInput(event, 1)"
+                       onfocus="focusElement(1)"
+                       onblur="leaveFocus(1)"/>
+                <div class="label">Confirm Password</div>
+            </div>
+            
+           <input disabled="true" type="submit" value="Submit" class="submit-btn"/>
+        </form>
+    </section>
+
+    <script src="/views/script.js" defer></script>
+</body>
+</html>
