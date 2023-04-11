@@ -355,34 +355,34 @@ if (process.env.NODE_ENV === 'production') {
     // })
 }
 
-// const t = [ 
-//     {name: 'Top seller 1', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller1.jpg', price: 1500}
+// const t = [
+//     {name: 'Necklace 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/6.jpg', price: '1200', __v: 0}
 //     , 
-//     {name: 'Top seller 2', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller2.jpg', price: 1300}
-//     ,
-//     {name: 'Top seller 3', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller3.jpg', price: 1900}
-//     ,
-//     {name: 'Top seller 4', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller4.jpg', price: 2000}
-//     ,
-//     {name: 'Top seller 5', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller5.jpg', price: 1100}
-//     ,
-//     {name: 'Top seller 6', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller6.jpg', price: 1600}
-//     ,
-//     {name: 'Top seller 7', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller7.jpg', price: 1300}
-//     ,
-//     {name: 'Top seller 8', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller8.jpg', price: 1500}
-//     ,
-//     {name: 'Top seller 9', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller9.jpg', price: 1200}
-//     ,
-//     {name: 'Top seller 10', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller10.jpg', price: 1900}
-//     ,
-//     {name: 'Top seller 11', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller11.jpg', price: 2500}
-//     ,
-//     {name: 'Top seller 12', img: 'https://karkhana-server.onrender.com/assets/products/topSeller/topSeller12.jpg', price: 3000}
+//     {name: 'Necklace 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/1.jpg', price: '1300', __v: 0}
+//     , 
+//     {name: 'Finger ring 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/8.jpg', price: '1400', __v: 0}
+//     , 
+//     {name: 'Finger ring 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/4.jpg', price: '1000', __v: 0}
+//     , 
+//     {name: 'Finger ring 7', img: 'https://karkhana-server.onrender.com/assets/products/featured/12.jpg', price: '1700', __v: 0}
+//     , 
+//     {name: 'Necklace 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/14.jpg', price: '1100', __v: 0}
+//     , 
+//     {name: 'Others 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/13.jpg', price: '1500', __v: 0}
+//     , 
+//     {name: 'Combo set 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/15.jpg', price: '1300', __v: 0}
+//     , 
+//     {name: 'Bracelet 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/17.jpg', price: '1100', __v: 0}
+//     , 
+//     {name: 'Necklace 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/16.jpg', price: '1200', __v: 0}
+//     , 
+//     {name: 'Combo set 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/18.jpg', price: '1000', __v: 0}
+//     , 
+//     {name: 'Ear ring 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/20.jpg', price: '2000', __v: 0}
 // ]
 
 // t.map(async item => {
-//     return await topSellerModel.create({
+//     return await featuredModel.create({
 //         name: item.name,
 //         img: item.img,
 //         price: item.price
