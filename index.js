@@ -114,7 +114,7 @@ app.get('/products/:productId', async (req, res) => {
             case "featured":
                 const featuredProducts = await featuredModel.find({});
                 console.log(featured);
-                if (!featured) return res.json({ status: 'database error' });
+                if (!featuredProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: featuredProducts });
 
             case "exclusive":
