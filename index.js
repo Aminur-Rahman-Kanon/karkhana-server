@@ -113,9 +113,18 @@ app.get('/products/:productId', async (req, res) => {
             
             case "featured":
                 const featuredProducts = await featuredModel.find({});
-                console.log(featured);
                 if (!featuredProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: featuredProducts });
+
+            case "trending":
+                const trendingProducts = await trendingModel.find({});
+                if (!trendingProducts) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: trendingProducts });
+
+            case "top-seller":
+                const topSellerProducts = await topSellerModel.find({});
+                if (!topSellerProducts) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: topSellerProducts });
 
             case "exclusive":
                 const exclusiveProducts = await exclusiveModel.find({});
