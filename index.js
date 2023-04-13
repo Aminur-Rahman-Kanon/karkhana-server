@@ -37,6 +37,7 @@ const othersModel = mongoose.model('other', productSchema);
 const exclusiveModel = mongoose.model('exclusive', productSchema);
 const trendingModel = mongoose.model('trending', productSchema);
 const topSellerModel = mongoose.model('topSeller', productSchema);
+const latestModel = mongoose.model('latest', productSchema);
 
 //multer
 const storage = multer.diskStorage({
@@ -125,6 +126,11 @@ app.get('/products/:productId', async (req, res) => {
                 const topSellerProducts = await topSellerModel.find({});
                 if (!topSellerProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: topSellerProducts });
+
+            case "latest":
+                const latestProducts = await latestModel.find({});
+                if (!latestProducts) return res.json({ status: 'database error' });
+                return res.json({ status: 'success', data: latestProducts });
 
             case "exclusive":
                 const exclusiveProducts = await exclusiveModel.find({});
@@ -365,36 +371,38 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // const t = [
-//     {name: 'Necklace 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/6.jpg', price: '1200', __v: 0}
+//     {name: 'Trending 1', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending1.jpg', price: '1200', quantity: 10, details: 'Nostrud aute magna voluptate quis enim et non sit culpa velit laboris proident.'}
 //     , 
-//     {name: 'Necklace 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/1.jpg', price: '1300', __v: 0}
+//     {name: 'Trending 2', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending2.jpg', price: '1300', quantity: 5, details: 'Incididunt anim incididunt non nulla laboris exercitation deserunt reprehenderit reprehenderit laboris occaecat.'}
 //     , 
-//     {name: 'Finger ring 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/8.jpg', price: '1400', __v: 0}
+//     {name: 'Trending 3', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending3.jpg', price: '1400', quantity: 6, details: 'In labore fugiat sit ut dolore tempor aliqua qui voluptate qui reprehenderit incididunt id aliquip.'}
 //     , 
-//     {name: 'Finger ring 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/4.jpg', price: '1000', __v: 0}
+//     {name: 'Trending 4', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending4.jpg', price: '1000', quantity: 7, details: 'Adipisicing excepteur eiusmod ex fugiat culpa nulla velit.'}
 //     , 
-//     {name: 'Finger ring 7', img: 'https://karkhana-server.onrender.com/assets/products/featured/12.jpg', price: '1700', __v: 0}
+//     {name: 'Trending 5', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending5.jpg', price: '1700', quantity: 8, details: 'Eu enim ea amet ad elit Lorem in officia.'}
 //     , 
-//     {name: 'Necklace 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/14.jpg', price: '1100', __v: 0}
+//     {name: 'Trending 6', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending6.jpg', price: '1100', quantity: 9, details: 'Consequat sunt eu ut sint quis Lorem ipsum minim culpa.'}
 //     , 
-//     {name: 'Others 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/13.jpg', price: '1500', __v: 0}
+//     {name: 'Trending 7', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending7.jpg', price: '1500', quantity: 8, details: 'Culpa ut ut ullamco quis reprehenderit aute commodo mollit ea elit ex excepteur.'}
 //     , 
-//     {name: 'Combo set 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/15.jpg', price: '1300', __v: 0}
+//     {name: 'Trending 8', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending8.jpg', price: '1300', quantity: 2, details: 'Sint reprehenderit proident officia magna mollit enim dolore ut ut aute consectetur et sunt.'}
 //     , 
-//     {name: 'Bracelet 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/17.jpg', price: '1100', __v: 0}
+//     {name: 'Trending 9', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending9.jpg', price: '1100', quantity: 1, details: 'Fugiat ullamco et sit duis tempor consectetur pariatur laboris mollit ea laborum cillum aliqua veniam.'}
 //     , 
-//     {name: 'Necklace 3', img: 'https://karkhana-server.onrender.com/assets/products/featured/16.jpg', price: '1200', __v: 0}
+//     {name: 'Trending 10', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending10.jpg', price: '1200', quantity: 12, details: 'Ad pariatur cillum do Lorem nulla ut et officia qui tempor aliqua ea.'}
 //     , 
-//     {name: 'Combo set 2', img: 'https://karkhana-server.onrender.com/assets/products/featured/18.jpg', price: '1000', __v: 0}
+//     {name: 'Trending 11', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending11.jpg', price: '1000', quantity: 3, details: 'Id sit dolore duis duis occaecat voluptate veniam dolor cupidatat.'}
 //     , 
-//     {name: 'Ear ring 1', img: 'https://karkhana-server.onrender.com/assets/products/featured/20.jpg', price: '2000', __v: 0}
+//     {name: 'Trending 12', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending12.jpg', price: '2000', quantity: 4, details: 'Duis elit Lorem eu aute.'}
 // ]
 
 // t.map(async item => {
-//     return await featuredModel.create({
+//     return await trendingModel.create({
 //         name: item.name,
 //         img: item.img,
-//         price: item.price
+//         price: item.price,
+//         quantity: item.quantity,
+//         details: item.details
 //     })
 // })
 

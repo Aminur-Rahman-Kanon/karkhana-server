@@ -16,6 +16,7 @@ const products = {
     name: String,
     img: String,
     price: String,
+    quantity: Number,
     details: String
 }
 
