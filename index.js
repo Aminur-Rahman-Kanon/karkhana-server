@@ -63,6 +63,24 @@ app.get('/products/:productId', async (req, res) => {
         const productId = product.productId;
         
         switch(productId) {
+            case 'get-products':
+                const featuredProduct = await featuredModel.find({});
+                const exclusiveProduct = await exclusiveModel.find({});
+                const trendingProduct = await trendingModel.find({});
+                const topSellerProduct = await topSellerModel.find({});
+                const bracelets = await braceletModel.find({});
+                const fingerRingProduct = await fingerRingsModel.find({});
+                const earRingProduct = await earRingsModel.find({});
+                const necklaces = await necklaceModel.find({});
+                const toeRingProduct = await toeRingsModel.find({});
+                const nepalis = await nepaliModel.find({});
+                const other = await othersModel.find({});
+
+                const product = await [...featuredProduct, ...exclusiveProduct, ...trendingProduct, ...topSellerProduct,
+                ...bracelets, ...fingerRingProduct, ...earRingProduct, ...necklaces, ...toeRingProduct, ...nepalis, ...other];
+
+                return res.json({ status: 'success', data: product });
+
             case 'initial-display':
                 const featured = await featuredModel.find({});
                 const exclusive = await exclusiveModel.find({});
@@ -129,6 +147,7 @@ app.get('/products/:productId', async (req, res) => {
 
             case "latest":
                 const latestProducts = await latestModel.find({});
+                console.log(latestProducts);
                 if (!latestProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: latestProducts });
 
@@ -136,7 +155,7 @@ app.get('/products/:productId', async (req, res) => {
                 const exclusiveProducts = await exclusiveModel.find({});
                 const products = await othersModel.find({});
                 const totalItem = exclusiveProducts.concat(products);
-                if (!exclusive || !products) return res.json({ status: 'database error' });
+                if (!exclusiveProducts || !products) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: totalItem })
 
             default:
@@ -371,33 +390,31 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // const t = [
-//     {name: 'Trending 1', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending1.jpg', price: '1200', quantity: 10, details: 'Nostrud aute magna voluptate quis enim et non sit culpa velit laboris proident.'}
+//     {category: 'others', rating: 2, name: 'Other 1', img: 'https://karkhana-server.onrender.com/assets/products/others/other1.jpg', price: '1200', quantity: 10, details: 'Laboris veniam mollit irure ut do pariatur excepteur.'}
+//     ,
+//     {category: 'others', rating: 4, name: 'Other 2', img: 'https://karkhana-server.onrender.com/assets/products/others/other2.jpg', price: '1300', quantity: 5, details: 'Non do enim laborum veniam tempor dolor aliquip eiusmod nulla pariatur aliquip duis veniam.'}
 //     , 
-//     {name: 'Trending 2', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending2.jpg', price: '1300', quantity: 5, details: 'Incididunt anim incididunt non nulla laboris exercitation deserunt reprehenderit reprehenderit laboris occaecat.'}
+//     {category: 'others', rating: 5, name: 'Other 3', img: 'https://karkhana-server.onrender.com/assets/products/others/other3.jpg', price: '1400', quantity: 6, details: 'Lorem amet sint proident laborum.'}
+//     ,
+//     {category: 'others', rating: 3, name: 'Other 4', img: 'https://karkhana-server.onrender.com/assets/products/others/other4.jpg', price: '1000', quantity: 7, details: 'Ipsum eu ad laboris consectetur reprehenderit dolore Lorem id aute anim aliqua Lorem cupidatat.'}
 //     , 
-//     {name: 'Trending 3', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending3.jpg', price: '1400', quantity: 6, details: 'In labore fugiat sit ut dolore tempor aliqua qui voluptate qui reprehenderit incididunt id aliquip.'}
+//     {category: 'others', rating: 4, name: 'Other 5', img: 'https://karkhana-server.onrender.com/assets/products/others/other5.jpg', price: '1700', quantity: 8, details: 'Culpa aute ea exercitation quis fugiat nisi commodo adipisicing nisi irure.'}
 //     , 
-//     {name: 'Trending 4', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending4.jpg', price: '1000', quantity: 7, details: 'Adipisicing excepteur eiusmod ex fugiat culpa nulla velit.'}
+//     {category: 'others', rating: 5, name: 'Other 6', img: 'https://karkhana-server.onrender.com/assets/products/others/other6.jpg', price: '1100', quantity: 9, details: 'Culpa quis nisi mollit est ullamco aute.'}
 //     , 
-//     {name: 'Trending 5', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending5.jpg', price: '1700', quantity: 8, details: 'Eu enim ea amet ad elit Lorem in officia.'}
+//     {category: 'others', rating: 3, name: 'Other 7', img: 'https://karkhana-server.onrender.com/assets/products/others/other7.jpg', price: '1500', quantity: 8, details: 'Ut adipisicing qui fugiat veniam.'}
+//     ,
+//     {category: 'others', rating: 3, name: 'Other 8', img: 'https://karkhana-server.onrender.com/assets/products/others/other8.jpg', price: '1300', quantity: 2, details: 'Anim sint laborum sit anim enim et pariatur laboris ut aliqua cupidatat do proident pariatur.'}
 //     , 
-//     {name: 'Trending 6', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending6.jpg', price: '1100', quantity: 9, details: 'Consequat sunt eu ut sint quis Lorem ipsum minim culpa.'}
+//     {category: 'others', rating: 3, name: 'Other 9', img: 'https://karkhana-server.onrender.com/assets/products/others/other9.jpg', price: '1100', quantity: 1, details: 'Veniam id qui dolore in eiusmod aliqua exercitation aliqua laboris fugiat ea consequat.'}
 //     , 
-//     {name: 'Trending 7', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending7.jpg', price: '1500', quantity: 8, details: 'Culpa ut ut ullamco quis reprehenderit aute commodo mollit ea elit ex excepteur.'}
-//     , 
-//     {name: 'Trending 8', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending8.jpg', price: '1300', quantity: 2, details: 'Sint reprehenderit proident officia magna mollit enim dolore ut ut aute consectetur et sunt.'}
-//     , 
-//     {name: 'Trending 9', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending9.jpg', price: '1100', quantity: 1, details: 'Fugiat ullamco et sit duis tempor consectetur pariatur laboris mollit ea laborum cillum aliqua veniam.'}
-//     , 
-//     {name: 'Trending 10', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending10.jpg', price: '1200', quantity: 12, details: 'Ad pariatur cillum do Lorem nulla ut et officia qui tempor aliqua ea.'}
-//     , 
-//     {name: 'Trending 11', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending11.jpg', price: '1000', quantity: 3, details: 'Id sit dolore duis duis occaecat voluptate veniam dolor cupidatat.'}
-//     , 
-//     {name: 'Trending 12', img: 'https://karkhana-server.onrender.com/assets/products/trending/trending12.jpg', price: '2000', quantity: 4, details: 'Duis elit Lorem eu aute.'}
+//     {category: 'others', rating: 1, name: 'Other 10', img: 'https://karkhana-server.onrender.com/assets/products/others/other10.jpg', price: '1200', quantity: 12, details: 'Et cupidatat proident velit ut sunt cupidatat fugiat ea cillum labore irure.'}
 // ]
 
 // t.map(async item => {
-//     return await trendingModel.create({
+//     return await exclusiveModel.create({
+//         category: item.category,
+//         rating: item.rating,
 //         name: item.name,
 //         img: item.img,
 //         price: item.price,
