@@ -75,9 +75,12 @@ app.get('/products/:productId', async (req, res) => {
                 const toeRingProduct = await toeRingsModel.find({});
                 const nepalis = await nepaliModel.find({});
                 const other = await othersModel.find({});
+                const combos = await comboModel.find({});
+                const latest = await latestModel.find({});
 
                 const product = await [...featuredProduct, ...exclusiveProduct, ...trendingProduct, ...topSellerProduct,
-                ...bracelets, ...fingerRingProduct, ...earRingProduct, ...necklaces, ...toeRingProduct, ...nepalis, ...other];
+                ...bracelets, ...fingerRingProduct, ...earRingProduct, ...necklaces, ...toeRingProduct, ...nepalis, ...other,
+                ...combos, ...latest];
 
                 return res.json({ status: 'success', data: product });
 
