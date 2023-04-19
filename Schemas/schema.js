@@ -22,8 +22,13 @@ const products = {
     details: String
 }
 
-
+const blog = {
+    img: String,
+    title: String,
+    date: String,
+    details: String
+}
 
 module.exports = {
-    registerSchema, products
+    registerSchema, products, blog
 }
