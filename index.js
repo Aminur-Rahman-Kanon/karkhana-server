@@ -151,7 +151,6 @@ app.get('/products/:productId', async (req, res) => {
 
             case "latest":
                 const latestProducts = await latestModel.find({});
-                console.log(latestProducts);
                 if (!latestProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: latestProducts });
 
