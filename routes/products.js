@@ -52,71 +52,70 @@ router.get('/', async (req, res) => {
                 const exclusiveItem = await exclusive.find({});
                 const trendingItem = await trending.find({});
                 const topSellerItem = await topSeller.find({});
-
-                // if (!featured || !exclusive) return res.json({ status: 'database not responded' });
+                
                 return res.json({ status: 'success', data:{ featuredItem, exclusiveItem, trendingItem, topSellerItem } })
 
-            case "ear-rings":
+            case "Ear Ring":
                 const earRings = await earRing.find({});
                 if (!earRings) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: earRings });
 
-            case "finger-rings":
+            case "Finger Ring":
                 const fingerRings = await fingerRing.find({});
                 if (!fingerRings) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: fingerRings });
 
-            case "toe-rings":
+            case "Toe Ring":
                 const toeRings = await toeRing.find({});
                 if (!toeRings) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: toeRings })
 
-            case "bracelet":
+            case "Bracelet":
                 const braceletItem = await bracelet.find({});
                 if (!braceletItem) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: braceletItem })
 
-            case "necklace":
+            case "Necklace":
                 const necklaceItem = await necklace.find({});
                 if (!necklaceItem) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: necklaceItem })
 
-            case "nepali":
+            case "Nepali":
                 const nepaliItem = await nepali.find({});
                 if (!nepaliItem) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: nepaliItem })
 
-            case "combo":
+            case "Combo":
                 const comboItem = await combo.find({});
                 if (!comboItem) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: comboItem })
 
-            case "others":
+            case "Other":
                 const others = await other.find({});
                 if (!others) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: others })
             
-            case "featured":
+            case "Featured":
                 const featuredProducts = await featured.find({});
                 if (!featuredProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: featuredProducts });
 
-            case "trending":
+            case "Trending":
                 const trendingProducts = await trending.find({});
                 if (!trendingProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: trendingProducts });
 
-            case "top-seller":
+            case "Top Seller":
                 const topSellerProducts = await topSeller.find({});
                 if (!topSellerProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: topSellerProducts });
 
-            case "latest":
+            case "Latest":
                 const latestProducts = await latest.find({});
                 if (!latestProducts) return res.json({ status: 'database error' });
                 return res.json({ status: 'success', data: latestProducts });
 
-            case "exclusive":
+            case "Exclusive":
                 const exclusiveProducts = await exclusive.find({});
                 const products = await other.find({});
                 const totalItem = exclusiveProducts.concat(products);

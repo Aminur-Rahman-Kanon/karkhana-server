@@ -3,7 +3,6 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 app.use(cors());
