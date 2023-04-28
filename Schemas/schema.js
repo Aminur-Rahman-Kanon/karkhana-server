@@ -18,7 +18,7 @@ const products = {
     category: String,
     rating: Number,
     name: String,
-    img: String,
+    img: Array,
     price: String,
     quantity: Number,
     details: String

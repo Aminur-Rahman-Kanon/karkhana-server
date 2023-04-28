@@ -1,26 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
 const registerModel = require('../Schemas/schema').registerModel;
 const bcrypt = require('bcrypt');
-const multer = require('multer');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log(`des ${file}`);
-        cb(null, 'public/assets/users');
-    },
-    filename: (req, file, cb) => {
-        console.log(req.body);
-        cb(null, file.originalname)
-    }
-})
-
-const upload = multer({storage: storage, limits: {
-    fileSize: 1024 * 1024
-} });
-
-router.post('/', upload.single('avatar') ,async (req, res) => {
+router.post('/' ,async (req, res) => {
 
     const userData = JSON.parse(req.body.data);
     const email = userData.email;
@@ -29,16 +12,14 @@ router.post('/', upload.single('avatar') ,async (req, res) => {
     if (!email) return res.json({ status: 'email not provided' });
     
     //change filename
-    if (req.file) {
-        const fileNames = req.file.originalname;
-        // const fileName = fileNames.split('.')[0]
-        const fileExt = fileNames.split('.')[1]
+    if (req.files) {        
+        const { avatar } = req.files
+        const ext = avatar.name.split('.')[1];
+        if (/^avatar/.test(avatar.mimetype)) return res.json({ status: 'invalid file' });
         
-        fs.rename(`public/assets/users/${fileNames}`, `public/assets/users/${email}.${fileExt}`, (err) => {
-            if (err) return res,json({ status: 'file upload error' });
-        })
+        avatar.mv(`public/assets/users/${userData.email}.${ext}`)
 
-        //update the database with the img link
+        // update the database with the img link
         await registerModel.collection.updateOne({
             email: email
         }, {
@@ -61,7 +42,7 @@ router.post('/', upload.single('avatar') ,async (req, res) => {
 
         const newPassword = await bcrypt.hash(userData.newpassword, 10);
 
-        registerModel.collection.updateMany({
+        registerModel.collection.updateOne({
             email: email
         }, {
             $set: {

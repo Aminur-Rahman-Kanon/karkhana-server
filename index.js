@@ -4,13 +4,38 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const multer = require('multer');
+const fileUpload = require('express-fileupload');
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', './public/views');
 app.set('view engine', 'ejs');
+app.use(fileUpload());
+
+const product = require('./Schemas/schema').trendingModel;
+
+// product.find({}).then(res => console.log(res.length))
+
+// const update = async () => {
+//     for (let i=0; i<12; i++){
+//         const img = [];
+//         //query product
+//         for (let j=0; j<4; j++){
+//             img.push(`https://karkhana-server.onrender.com/assets/products/trending/trending${i+1}/trending${j+1}.jpg`)
+//         }
+        
+//         await product.updateOne({
+//             name: `Trending ${i+1}`
+//         }, {
+//             $set: {
+//                 img: img
+//             }
+//         })
+//     }
+// }
+
+// update();
 
 //imported route
 const loginRoute = require('./routes/login');
@@ -22,22 +47,7 @@ const confirmResetPassword = require('./routes/confirmResetPassword');
 const getBlog = require('./routes/blog');
 const updateProfile = require('./routes/updateProfile');
 const updateRedirect = require('./routes/updateRedirect');
-
-//multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log(`des ${file}`);
-        cb(null, 'public/assets/users');
-    },
-    filename: (req, file, cb) => {
-        console.log(req.body);
-        cb(null, file.originalname)
-    }
-})
-
-const upload = multer({storage: storage, limits: {
-    fileSize: 1024 * 1024
-}});
+const addProducts = require('./routes/addProducts');
 
 //routes
 app.use('/login', loginRoute);
@@ -49,7 +59,7 @@ app.use('/reset-password/:id/:token', confirmResetPassword);
 app.use('/get-blogs', getBlog);
 app.use('/update-profile', updateProfile);
 app.use('/redirect-user', updateRedirect);
-
+app.use('/add-products', addProducts);
 
 app.use(express.static('public'));
 
@@ -71,4 +81,3 @@ app.listen(port || '8000', (err) => {
     else console.log(err);
 })
 
-module.exports = upload;
