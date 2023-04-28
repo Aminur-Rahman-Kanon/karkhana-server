@@ -33,9 +33,8 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/featured/${productName}/${item.toLowerCase()}.${ext}`);
-                featuredImg.push(`https://karkhana-server.onrender.com/assets/products/featured/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/featured/${productName}/${item.toLowerCase()}.jpg`);
+                featuredImg.push(`https://karkhana-server.onrender.com/assets/products/featured/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -55,9 +54,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/bracelets/${productName}/${item.toLowerCase()}.${ext}`);
-                braceletImg.push(`https://karkhana-server.onrender.com/assets/products/bracelets/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/bracelets/${productName}/${item.toLowerCase()}.jpg`);
+                braceletImg.push(`https://karkhana-server.onrender.com/assets/products/bracelets/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -77,9 +76,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/combo/${productName}/${item.toLowerCase()}.${ext}`);
-                comboImg.push(`https://karkhana-server.onrender.com/assets/products/combo/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/combo/${productName}/${item.toLowerCase()}.jpg`);
+                comboImg.push(`https://karkhana-server.onrender.com/assets/products/combo/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -99,9 +98,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/ear rings/${productName}/${item.toLowerCase()}.${ext}`);
-                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/ear rings/${productName}/${item.toLowerCase()}.jpg`);
+                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -121,9 +120,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/exclusive/${productName}/${item.toLowerCase()}.${ext}`);
-                exclusiveImg.push(`https://karkhana-server.onrender.com/assets/products/exclusive/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/exclusive/${productName}/${item.toLowerCase()}.jpg`);
+                exclusiveImg.push(`https://karkhana-server.onrender.com/assets/products/exclusive/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -145,8 +144,8 @@ router.post('/', async (req, res) => {
             Object.keys(req.files).forEach(async item => {
                 console.log(req.files[item]);
                 const ext = await req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/finger rings/${productName}/${item.toLowerCase()}.${ext}`);
-                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`);
+                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -166,9 +165,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/latest/${productName}/${item.toLowerCase()}.${ext}`);
-                latestImg.push(`https://karkhana-server.onrender.com/assets/products/latest/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/latest/${productName}/${item.toLowerCase()}.jpg`);
+                latestImg.push(`https://karkhana-server.onrender.com/assets/products/latest/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -188,9 +187,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/necklace/${productName}/${item.toLowerCase()}.${ext}`);
-                necklaceImg.push(`https://karkhana-server.onrender.com/assets/products/necklace/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/necklace/${productName}/${item.toLowerCase()}.jpg`);
+                necklaceImg.push(`https://karkhana-server.onrender.com/assets/products/necklace/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -210,9 +209,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/nepali/${productName}/${item.toLowerCase()}.${ext}`);
-                nepaliImg.push(`https://karkhana-server.onrender.com/assets/products/nepali/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/nepali/${productName}/${item.toLowerCase()}.jpg`);
+                nepaliImg.push(`https://karkhana-server.onrender.com/assets/products/nepali/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -232,9 +231,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/others/${productName}/${item.toLowerCase()}.${ext}`);
-                otherImg.push(`https://karkhana-server.onrender.com/assets/products/others/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/others/${productName}/${item.toLowerCase()}.jpg`);
+                otherImg.push(`https://karkhana-server.onrender.com/assets/products/others/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -254,9 +253,9 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/toe rings/${productName}/${item.toLowerCase()}.${ext}`);
-                toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toe rings/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`);
+                toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -276,11 +275,10 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/topSeller/${productName}/${item.toLowerCase()}.${ext}`);
-                topSellerImg.push(`https://karkhana-server.onrender.com/assets/products/topSeller/${productName}/${item.toLowerCase()}.${ext}`)
+                
+                req.files[item].mv(`public/assets/products/topSeller/${productName}/${item.toLowerCase()}.jpg`);
+                topSellerImg.push(`https://karkhana-server.onrender.com/assets/products/topSeller/${productName}/${item.toLowerCase()}.jpg`)
             })
-
             //push database
             data['rating'] = 0
             data['img'] = topSellerImg;
@@ -298,9 +296,8 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/trending/${productName}/${item.toLowerCase()}.${ext}`);
-                trendingImg.push(`https://karkhana-server.onrender.com/assets/products/trending/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/trending/${productName}/${item.toLowerCase()}.jpg`);
+                trendingImg.push(`https://karkhana-server.onrender.com/assets/products/trending/${productName}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
