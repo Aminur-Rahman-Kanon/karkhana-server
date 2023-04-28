@@ -13,8 +13,6 @@ app.set('views', './public/views');
 app.set('view engine', 'ejs');
 app.use(fileUpload());
 
-const product = require('./Schemas/schema').trendingModel;
-
 // product.find({}).then(res => console.log(res.length))
 
 // const update = async () => {

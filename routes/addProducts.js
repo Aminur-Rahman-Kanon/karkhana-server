@@ -95,13 +95,13 @@ router.post('/', async (req, res) => {
 
             const earRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/earRings/${productName}`);
+            fs.mkdirSync(`public/assets/products/ear rings/${productName}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
                 const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/earRings/${productName}/${item.toLowerCase()}.${ext}`);
-                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/earRings/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/ear rings/${productName}/${item.toLowerCase()}.${ext}`);
+                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName}/${item.toLowerCase()}.${ext}`)
             })
 
             //push database
@@ -139,13 +139,13 @@ router.post('/', async (req, res) => {
 
             const fingerRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/fingerRings/${productName}`);
+            fs.mkdirSync(`public/assets/products/finger rings/${productName}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
                 const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/fingerRings/${productName}/${item.toLowerCase()}.${ext}`);
-                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/fingerRings/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/finger rings/${productName}/${item.toLowerCase()}.${ext}`);
+                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName}/${item.toLowerCase()}.${ext}`)
             })
 
             //push database
@@ -249,13 +249,13 @@ router.post('/', async (req, res) => {
 
             const toeRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/toeRings/${productName}`);
+            fs.mkdirSync(`public/assets/products/toe rings/${productName}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
                 const ext = req.files[item].name.split('.').at(-1);
-                req.files[item].mv(`public/assets/products/toeRings/${productName}/${item.toLowerCase()}.${ext}`);
-                toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toeRings/${productName}/${item.toLowerCase()}.${ext}`)
+                req.files[item].mv(`public/assets/products/toe rings/${productName}/${item.toLowerCase()}.${ext}`);
+                toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toe rings/${productName}/${item.toLowerCase()}.${ext}`)
             })
 
             //push database
@@ -271,7 +271,7 @@ router.post('/', async (req, res) => {
 
             const topSellerImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/topSeller/${productName}`);
+            fs.mkdirSync(`public/assets/products/top seller/${productName}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
