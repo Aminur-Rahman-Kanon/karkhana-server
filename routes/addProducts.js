@@ -142,8 +142,6 @@ router.post('/', async (req, res) => {
 
             //storing image
             Object.keys(req.files).forEach(async item => {
-                console.log(req.files[item]);
-                const ext = await req.files[item].name.split('.').at(-1);
                 req.files[item].mv(`public/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`);
                 fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`)
             })
