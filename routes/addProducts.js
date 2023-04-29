@@ -19,7 +19,7 @@ const fs = require('fs');
 router.post('/', async (req, res) => {
     const data = await JSON.parse(req.body.data);
     const productCategory = data.category.toLowerCase();
-    const productName = data.name.toLowerCase();
+    const productName = data.name
 
     switch (productCategory) {
         case "featured":
@@ -29,12 +29,17 @@ router.post('/', async (req, res) => {
 
             const featuredImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/featured/${productName}`);
+            const featuredDirectory = fs.existsSync(`public/assets/products/featured/${productName.toLowerCase()}`);
+            if (featuredDirectory) {
+                return res.json({ status: 'product exist' });
+            }
+
+            fs.mkdirSync(`public/assets/products/featured/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/featured/${productName}/${item.toLowerCase()}.jpg`);
-                featuredImg.push(`https://karkhana-server.onrender.com/assets/products/featured/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/featured/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                featuredImg.push(`https://karkhana-server.onrender.com/assets/products/featured/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -46,17 +51,22 @@ router.post('/', async (req, res) => {
         case "bracelet":
             //checking if product exist
             const braceletProduct = await braceletModel.find({ name: productName });
+
             if (braceletProduct.length) return res.json({ status: 'product exist' ,  product: braceletProduct });
 
             const braceletImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/bracelets/${productName}`);
+            const braceletDirectory = fs.existsSync(`public/assets/products/bracelets/${productName.toLowerCase()}`);
+            if (braceletDirectory){
+                return res.json({ status: 'product exist' })
+            }
+
+            fs.mkdirSync(`public/assets/products/bracelets/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/bracelets/${productName}/${item.toLowerCase()}.jpg`);
-                braceletImg.push(`https://karkhana-server.onrender.com/assets/products/bracelets/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/bracelets/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                braceletImg.push(`https://karkhana-server.onrender.com/assets/products/bracelets/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -72,13 +82,16 @@ router.post('/', async (req, res) => {
 
             const comboImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/combo/${productName}`);
+            const comboDirectory = fs.existsSync(`public/assets/products/combo/${productName.toLowerCase()}`);
+            if (comboDirectory) {
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/combo/${productName.toLowerCase()}`);
 
             //storing image
-            Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/combo/${productName}/${item.toLowerCase()}.jpg`);
-                comboImg.push(`https://karkhana-server.onrender.com/assets/products/combo/${productName}/${item.toLowerCase()}.jpg`)
+            Object.keys(req.files).forEach(item => {    
+                req.files[item].mv(`public/assets/products/combo/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                comboImg.push(`https://karkhana-server.onrender.com/assets/products/combo/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -94,13 +107,16 @@ router.post('/', async (req, res) => {
 
             const earRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/ear rings/${productName}`);
+            const earRingDirectory = fs.existsSync(`public/assets/products/ear rings/${productName.toLowerCase()}`);
+            if (earRingDirectory){
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/ear rings/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/ear rings/${productName}/${item.toLowerCase()}.jpg`);
-                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/ear rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -116,12 +132,15 @@ router.post('/', async (req, res) => {
 
             const exclusiveImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/exclusive/${productName}`);
+            const exclusiveDirectory = fs.existsSync(`public/assets/products/exclusive/${productName.toLowerCase()}`);
+            if (exclusiveDirectory) {
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/exclusive/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/exclusive/${productName}/${item.toLowerCase()}.jpg`);
+                req.files[item].mv(`public/assets/products/exclusive/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
                 exclusiveImg.push(`https://karkhana-server.onrender.com/assets/products/exclusive/${productName}/${item.toLowerCase()}.jpg`)
             })
 
@@ -138,34 +157,42 @@ router.post('/', async (req, res) => {
 
             const fingerRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/finger rings/${productName}`);
+            const fingerRingDirectory = fs.existsSync(`public/assets/products/finger rings/${productName.toLowerCase()}`);
+            if (fingerRingDirectory){
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/finger rings/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(async item => {
-                req.files[item].mv(`public/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`);
-                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/finger rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
             data['rating'] = 0
             data['img'] = fingerRingImg;
-            await fingerRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
+            // await fingerRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "latest":
+            console.log('latest');
             //checking if product exist
             const latest = await latestModel.find({ name: productName });
             if (latest.length) return res.json({ status: 'product exist' ,  product: latest });
 
             const latestImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/latest/${productName}`);
+            const latestDirectory = fs.existsSync(`public/assets/products/latest/${productName.toLowerCase()}`);
+            if (latestDirectory){
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/latest/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/latest/${productName}/${item.toLowerCase()}.jpg`);
-                latestImg.push(`https://karkhana-server.onrender.com/assets/products/latest/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/latest/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                latestImg.push(`https://karkhana-server.onrender.com/assets/products/latest/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -181,13 +208,14 @@ router.post('/', async (req, res) => {
 
             const necklaceImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/necklace/${productName}`);
+            const necklaceDirectory = fs.existsSync(`public/assets/products/necklace/${productName.toLowerCase()}`);
+            fs.mkdirSync(`public/assets/products/necklace/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
                 
-                req.files[item].mv(`public/assets/products/necklace/${productName}/${item.toLowerCase()}.jpg`);
-                necklaceImg.push(`https://karkhana-server.onrender.com/assets/products/necklace/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/necklace/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                necklaceImg.push(`https://karkhana-server.onrender.com/assets/products/necklace/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -203,13 +231,17 @@ router.post('/', async (req, res) => {
 
             const nepaliImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/nepali/${productName}`);
+            const nepaliDirectory = fs.existsSync(`public/assets/products/nepali/${productName.toLowerCase()}`);
+            if (nepaliDirectory){
+                return res.json({ status: 'product exist' })
+            }
+            fs.mkdirSync(`public/assets/products/nepali/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
                 
-                req.files[item].mv(`public/assets/products/nepali/${productName}/${item.toLowerCase()}.jpg`);
-                nepaliImg.push(`https://karkhana-server.onrender.com/assets/products/nepali/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/nepali/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                nepaliImg.push(`https://karkhana-server.onrender.com/assets/products/nepali/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -225,13 +257,13 @@ router.post('/', async (req, res) => {
 
             const otherImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/others/${productName}`);
+            const otherDirectory = fs.existsSync(`public/assets/products/others/${productName.toLowerCase()}`);
+            fs.mkdirSync(`public/assets/products/others/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/others/${productName}/${item.toLowerCase()}.jpg`);
-                otherImg.push(`https://karkhana-server.onrender.com/assets/products/others/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/others/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                otherImg.push(`https://karkhana-server.onrender.com/assets/products/others/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
@@ -247,11 +279,14 @@ router.post('/', async (req, res) => {
 
             const toeRingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/toe rings/${productName}`);
+            const toeRingDirectory = fs.existsSync(`public/assets/products/toe rings/${productName.toLowerCase()}`);
+            if (toeRingDirectory){
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/toe rings/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
                 req.files[item].mv(`public/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`);
                 toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`)
             })
@@ -269,13 +304,16 @@ router.post('/', async (req, res) => {
 
             const topSellerImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/top seller/${productName}`);
+            const topSellerDirectory = fs.existsSync(`public/assets/products/top seller/${productName.toLowerCase()}`)
+            if (topSellerDirectory){
+                return res.json({ statu: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/top seller/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/topSeller/${productName}/${item.toLowerCase()}.jpg`);
-                topSellerImg.push(`https://karkhana-server.onrender.com/assets/products/topSeller/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/topSeller/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                topSellerImg.push(`https://karkhana-server.onrender.com/assets/products/topSeller/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
             //push database
             data['rating'] = 0
@@ -290,12 +328,16 @@ router.post('/', async (req, res) => {
 
             const trendingImg = [];
             //create directory
-            fs.mkdirSync(`public/assets/products/trending/${productName}`);
+            const trendingDirectory = fs.existsSync(`public/assets/products/trending/${productName.toLowerCase()}`);
+            if (trendingDirectory){
+                return res.json({ status: 'product exist' });
+            }
+            fs.mkdirSync(`public/assets/products/trending/${productName.toLowerCase()}`);
 
             //storing image
             Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/trending/${productName}/${item.toLowerCase()}.jpg`);
-                trendingImg.push(`https://karkhana-server.onrender.com/assets/products/trending/${productName}/${item.toLowerCase()}.jpg`)
+                req.files[item].mv(`public/assets/products/trending/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
+                trendingImg.push(`https://karkhana-server.onrender.com/assets/products/trending/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
             })
 
             //push database
