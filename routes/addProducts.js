@@ -172,7 +172,7 @@ router.post('/', async (req, res) => {
             //push database
             data['rating'] = 0
             data['img'] = fingerRingImg;
-            // await fingerRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
+            await fingerRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "latest":
