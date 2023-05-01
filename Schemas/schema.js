@@ -16,11 +16,12 @@ const registerSchema = {
 
 const products = {
     category: String,
-    rating: Number,
     name: String,
-    img: Array,
-    price: String,
+    rating: Number,
     quantity: Number,
+    impression: Number,
+    price: String,
+    img: Array,
     details: String
 }
 

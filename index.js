@@ -11,29 +11,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', './public/views');
 app.set('view engine', 'ejs');
-app.use(fileUpload());
-
-// product.find({}).then(res => console.log(res.length))
-
-// const update = async () => {
-//     for (let i=0; i<12; i++){
-//         const img = [];
-//         //query product
-//         for (let j=0; j<4; j++){
-//             img.push(`https://karkhana-server.onrender.com/assets/products/trending/trending${i+1}/trending${j+1}.jpg`)
-//         }
-        
-//         await product.updateOne({
-//             name: `Trending ${i+1}`
-//         }, {
-//             $set: {
-//                 img: img
-//             }
-//         })
-//     }
-// }
-
-// update();
 
 //imported route
 const loginRoute = require('./routes/login');

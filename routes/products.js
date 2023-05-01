@@ -22,6 +22,8 @@ const combo = require('../Schemas/schema').comboModel;
 router.get('/', async (req, res) => {
     const product = req.params;
 
+    console.log(product);
+
     if (product.hasOwnProperty('productId')){
         const productId = product.productId;
         

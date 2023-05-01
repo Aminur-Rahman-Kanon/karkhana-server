@@ -14,335 +14,376 @@ const trendingModel = require('../Schemas/schema').trendingModel;
 const topSellerModel = require('../Schemas/schema').topSellerModel;
 const latestModel = require('../Schemas/schema').latestModel;
 const blogModel = require('../Schemas/schema').blogModel;
-const fs = require('fs');
+const multer = require('multer');
 
-router.post('/', async (req, res) => {
+const firebase = require('firebase/app');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBongj0o_QcFuEkJMfiqpT27Nyc-p7G7O4",
+    authDomain: "karkhana-c685d.firebaseapp.com",
+    projectId: "karkhana-c685d",
+    storageBucket: "karkhana-c685d.appspot.com",
+    messagingSenderId: "638258626182",
+    appId: "1:638258626182:web:82f844b473ce1133e7db07",
+    measurementId: "G-VW0WXX4VZB"
+};
+
+const upload = multer({ storage: multer.memoryStorage() })
+
+firebase.initializeApp(firebaseConfig);
+
+const storage = getStorage();
+
+router.post('/', upload.array('photo'), async (req, res) => {
     const data = await JSON.parse(req.body.data);
     const productCategory = data.category.toLowerCase();
-    const productName = data.name
-
+    const productName = data.name.toLowerCase();
+    
     switch (productCategory) {
         case "featured":
-            //checking if product exist
-            const featuredProduct = await featuredModel.find({ name: productName });
-            if (featuredProduct.length) return res.json({ status: 'product exist' ,  product: featuredProduct });
+            const featuredItem = await featuredModel.find({ name: data.name });
+            if (featuredItem.length) return res.json({ status: 'product exist', product: featuredItem });
 
+            if (!req.files.length) return res.json({ status: 'no img found' });
             const featuredImg = [];
-            //create directory
-            const featuredDirectory = fs.existsSync(`public/assets/products/featured/${productName.toLowerCase()}`);
-            if (featuredDirectory) {
-                return res.json({ status: 'product exist' });
+            
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => featuredImg.push(url)).catch(err => console.log(err));
             }
-
-            fs.mkdirSync(`public/assets/products/featured/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/featured/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                featuredImg.push(`https://karkhana-server.onrender.com/assets/products/featured/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = featuredImg;
-            await featuredModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
+
+            await featuredModel.create(data).then(result => res.json({ status: `${data.name} success` })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "bracelet":
             //checking if product exist
-            const braceletProduct = await braceletModel.find({ name: productName });
-
-            if (braceletProduct.length) return res.json({ status: 'product exist' ,  product: braceletProduct });
-
+            const braceletItem = braceletModel.find({ name: data.name });
+            if ((await braceletItem).length) return res.json({ status: 'product exist', product: braceletItem });
+            if (!req.files.length) return res.json({ status: 'no img found' });
             const braceletImg = [];
-            //create directory
-            const braceletDirectory = fs.existsSync(`public/assets/products/bracelets/${productName.toLowerCase()}`);
-            if (braceletDirectory){
-                return res.json({ status: 'product exist' })
+            
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => braceletImg.push(url)).catch(err => console.log(err));
             }
-
-            fs.mkdirSync(`public/assets/products/bracelets/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/bracelets/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                braceletImg.push(`https://karkhana-server.onrender.com/assets/products/bracelets/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = braceletImg;
-            await braceletModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
+            await braceletModel.create(data).then(result => res.json({ status: `${data.name} success` })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "combo":
             //checking if product exist
-            const comboProduct = await comboModel.find({ name: productName });
+            const comboProduct = await comboModel.find({ name: data.name });
             if (comboProduct.length) return res.json({ status: 'product exist' ,  product: comboProduct });
+
+            if (!req.files.length) return res.json({ status: 'no img found' });
 
             const comboImg = [];
             //create directory
-            const comboDirectory = fs.existsSync(`public/assets/products/combo/${productName.toLowerCase()}`);
-            if (comboDirectory) {
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => comboImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/combo/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {    
-                req.files[item].mv(`public/assets/products/combo/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                comboImg.push(`https://karkhana-server.onrender.com/assets/products/combo/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = comboImg;
+
             await comboModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "ear ring":
             //checking if product exist
-            const earRing = await earRingModel.find({ name: productName });
+            const earRing = await earRingModel.find({ name: data.name });
             if (earRing.length) return res.json({ status: 'product exist' ,  product: earRing });
 
             const earRingImg = [];
-            //create directory
-            const earRingDirectory = fs.existsSync(`public/assets/products/ear rings/${productName.toLowerCase()}`);
-            if (earRingDirectory){
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => earRingImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/ear rings/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/ear rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                earRingImg.push(`https://karkhana-server.onrender.com/assets/products/ear rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = earRingImg;
+            
             await earRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "exclusive":
             //checking if product exist
-            const exclusive = await exclusiveModel.find({ name: productName });
+            const exclusive = await exclusiveModel.find({ name: data.name });
             if (exclusive.length) return res.json({ status: 'product exist' ,  product: exclusive });
 
             const exclusiveImg = [];
             //create directory
-            const exclusiveDirectory = fs.existsSync(`public/assets/products/exclusive/${productName.toLowerCase()}`);
-            if (exclusiveDirectory) {
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => exclusiveImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/exclusive/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/exclusive/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                exclusiveImg.push(`https://karkhana-server.onrender.com/assets/products/exclusive/${productName}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = exclusiveImg;
+
             await exclusiveModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "finger ring":
             //checking if product exist
-            const fingerRing = await fingerRingModel.find({ name: productName });
+            const fingerRing = await fingerRingModel.find({ name: data.name });
             if (fingerRing.length) return res.json({ status: 'product exist' ,  product: fingerRing });
 
             const fingerRingImg = [];
-            //create directory
-            const fingerRingDirectory = fs.existsSync(`public/assets/products/finger rings/${productName.toLowerCase()}`);
-            if (fingerRingDirectory){
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => fingerRingImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/finger rings/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(async item => {
-                req.files[item].mv(`public/assets/products/finger rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                fingerRingImg.push(`https://karkhana-server.onrender.com/assets/products/finger rings/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = fingerRingImg;
+
             await fingerRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "latest":
-            console.log('latest');
             //checking if product exist
-            const latest = await latestModel.find({ name: productName });
+            const latest = await latestModel.find({ name: data.name });
             if (latest.length) return res.json({ status: 'product exist' ,  product: latest });
 
             const latestImg = [];
             //create directory
-            const latestDirectory = fs.existsSync(`public/assets/products/latest/${productName.toLowerCase()}`);
-            if (latestDirectory){
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => latestImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/latest/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/latest/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                latestImg.push(`https://karkhana-server.onrender.com/assets/products/latest/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = latestImg;
+
             await latestModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "necklace":
             //checking if product exist
-            const necklace = await necklaceModel.find({ name: productName });
+            const necklace = await necklaceModel.find({ name: data.name });
             if (necklace.length) return res.json({ status: 'product exist' ,  product: necklace });
 
             const necklaceImg = [];
             //create directory
-            const necklaceDirectory = fs.existsSync(`public/assets/products/necklace/${productName.toLowerCase()}`);
-            fs.mkdirSync(`public/assets/products/necklace/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/necklace/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                necklaceImg.push(`https://karkhana-server.onrender.com/assets/products/necklace/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => necklaceImg.push(url)).catch(err => console.log(err));
+            }
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = necklaceImg;
+
             await necklaceModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "nepali":
             //checking if product exist
-            const nepali = await nepaliModel.find({ name: productName });
+            const nepali = await nepaliModel.find({ name: data.name });
             if (nepali.length) return res.json({ status: 'product exist' ,  product: nepali });
 
             const nepaliImg = [];
             //create directory
-            const nepaliDirectory = fs.existsSync(`public/assets/products/nepali/${productName.toLowerCase()}`);
-            if (nepaliDirectory){
-                return res.json({ status: 'product exist' })
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => nepaliImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/nepali/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                
-                req.files[item].mv(`public/assets/products/nepali/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                nepaliImg.push(`https://karkhana-server.onrender.com/assets/products/nepali/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = nepaliImg;
+
             await nepaliModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "other":
             //checking if product exist
-            const other = await otherModel.find({ name: productName });
+            const other = await otherModel.find({ name: data.name });
             if (other.length) return res.json({ status: 'product exist' ,  product: other });
 
             const otherImg = [];
-            //create directory
-            const otherDirectory = fs.existsSync(`public/assets/products/others/${productName.toLowerCase()}`);
-            fs.mkdirSync(`public/assets/products/others/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/others/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                otherImg.push(`https://karkhana-server.onrender.com/assets/products/others/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => otherImg.push(url)).catch(err => console.log(err));
+            }
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = otherImg;
+            
             await otherModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "toe ring":
             //checking if product exist
-            const toeRing = await toeRingModel.find({ name: productName });
+            const toeRing = await toeRingModel.find({ name: data.name });
             if (toeRing.length) return res.json({ status: 'product exist' ,  product: toeRing });
 
             const toeRingImg = [];
-            //create directory
-            const toeRingDirectory = fs.existsSync(`public/assets/products/toe rings/${productName.toLowerCase()}`);
-            if (toeRingDirectory){
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => toeRingImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/toe rings/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`);
-                toeRingImg.push(`https://karkhana-server.onrender.com/assets/products/toe rings/${productName}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = toeRingImg;
+
             await toeRingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "top seller":
             //checking if product exist
-            const topSeller = await topSellerModel.find({ name: productName });
+            const topSeller = await topSellerModel.find({ name: data.name });
             if (topSeller.length) return res.json({ status: 'product exist' ,  product: topSeller });
 
             const topSellerImg = [];
-            //create directory
-            const topSellerDirectory = fs.existsSync(`public/assets/products/top seller/${productName.toLowerCase()}`)
-            if (topSellerDirectory){
-                return res.json({ statu: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => topSellerImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/top seller/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/topSeller/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                topSellerImg.push(`https://karkhana-server.onrender.com/assets/products/topSeller/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = topSellerImg;
+
             await topSellerModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "trending":
             //checking if product exist
-            const trending = await trendingModel.find({ name: productName });
+            const trending = await trendingModel.find({ name: data.name });
             if (trending.length) return res.json({ status: 'product exist' ,  product: trending });
 
             const trendingImg = [];
-            //create directory
-            const trendingDirectory = fs.existsSync(`public/assets/products/trending/${productName.toLowerCase()}`);
-            if (trendingDirectory){
-                return res.json({ status: 'product exist' });
+            for(let i=0; i<req.files.length; i++) {
+                const storageRef = ref(storage, `products/${productCategory}/${productName}/${productName}${i+1}`);
+        
+                const metaData = {
+                    contentType: req.files[i].mimetype
+                }
+        
+                const snapshot = await uploadBytesResumable(storageRef, req.files[i].buffer, metaData);
+        
+                await getDownloadURL(snapshot.ref).then(url => trendingImg.push(url)).catch(err => console.log(err));
             }
-            fs.mkdirSync(`public/assets/products/trending/${productName.toLowerCase()}`);
-
-            //storing image
-            Object.keys(req.files).forEach(item => {
-                req.files[item].mv(`public/assets/products/trending/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`);
-                trendingImg.push(`https://karkhana-server.onrender.com/assets/products/trending/${productName.toLowerCase()}/${item.toLowerCase()}.jpg`)
-            })
-
+        
             //push database
-            data['rating'] = 0
+            data['rating'] = 0;
+            data['impression'] = 0;
             data['img'] = trendingImg;
+
             await trendingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
