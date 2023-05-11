@@ -1,132 +1,53 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 //models
-const featured = require('../Schemas/schema').featuredModel;
-const exclusive = require('../Schemas/schema').exclusiveModel;
-const trending = require('../Schemas/schema').trendingModel;
-const topSeller = require('../Schemas/schema').topSellerModel;
-const bracelet = require('../Schemas/schema').braceletModel;
-const fingerRing = require('../Schemas/schema').fingerRingsModel;
-const earRing = require('../Schemas/schema').earRingsModel;
-const necklace = require('../Schemas/schema').necklaceModel;
-const toeRing = require('../Schemas/schema').toeRingsModel;
-const nepali = require('../Schemas/schema').nepaliModel;
-const other = require('../Schemas/schema').othersModel;
-const latest = require('../Schemas/schema').latestModel;
-const combo = require('../Schemas/schema').comboModel;
+const featuredModel = require('../Schemas/schema').featuredModel;
+const exclusiveModel = require('../Schemas/schema').exclusiveModel;
+const trendingModel = require('../Schemas/schema').trendingModel;
+const topSellerModel = require('../Schemas/schema').topSellerModel;
+const braceletModel = require('../Schemas/schema').braceletModel;
+const fingerRingModel = require('../Schemas/schema').fingerRingsModel;
+const earRingModel = require('../Schemas/schema').earRingsModel;
+const necklaceModel = require('../Schemas/schema').necklaceModel;
+const toeRingModel = require('../Schemas/schema').toeRingsModel;
+const nepaliModel = require('../Schemas/schema').nepaliModel;
+const otherModel = require('../Schemas/schema').othersModel;
+const latestModel = require('../Schemas/schema').latestModel;
+const comboModel = require('../Schemas/schema').comboModel;
+const blogModel = require('../Schemas/schema').blogModel;
 
 
 router.get('/', async (req, res) => {
-    const product = req.params;
-
-    console.log(product);
-
-    if (product.hasOwnProperty('productId')){
-        const productId = product.productId;
+    try {
+        //fetching all products one by one
+        const featured = await featuredModel.find({});
+        const exclusive = await exclusiveModel.find({});
+        const trending = await trendingModel.find({});
+        const topseller = await topSellerModel.find({});
+        const bracelet = await braceletModel.find({});
+        const fingerring = await fingerRingModel.find({});
+        const earring = await earRingModel.find({});
+        const toering = await toeRingModel.find({});
+        const necklace = await necklaceModel.find({});
+        const nepali = await nepaliModel.find({});
+        const other = await otherModel.find({});
+        const combo = await comboModel.find({});
+        const latest = await latestModel.find({});
+        const blog = await blogModel.find({})
         
-        switch(productId) {
-            case 'get-products':
-                const featuredProduct = await featured.find({});
-                const exclusiveProduct = await exclusive.find({});
-                const trendingProduct = await trending.find({});
-                const topSellerProduct = await topSeller.find({});
-                const bracelets = await bracelet.find({});
-                const fingerRingProduct = await fingerRing.find({});
-                const earRingProduct = await earRing.find({});
-                const necklaces = await necklace.find({});
-                const toeRingProduct = await toeRing.find({});
-                const nepalis = await nepali.find({});
-                const otherItem = await other.find({});
-                const combos = await combo.find({});
-                const latestItem = await latest.find({});
-
-                const product = [...featuredProduct, ...exclusiveProduct, ...trendingProduct, ...topSellerProduct,
-                ...bracelets, ...fingerRingProduct, ...earRingProduct, ...necklaces, ...toeRingProduct, ...nepalis, ...otherItem,
-                ...combos, ...latestItem];
-
-                return res.json({ status: 'success', data: product });
-
-            case 'initial-display':
-                const featuredItem = await featured.find({});
-                const exclusiveItem = await exclusive.find({});
-                const trendingItem = await trending.find({});
-                const topSellerItem = await topSeller.find({});
-                
-                return res.json({ status: 'success', data:{ featuredItem, exclusiveItem, trendingItem, topSellerItem } })
-
-            case "Ear Ring":
-                const earRings = await earRing.find({});
-                if (!earRings) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: earRings });
-
-            case "Finger Ring":
-                const fingerRings = await fingerRing.find({});
-                if (!fingerRings) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: fingerRings });
-
-            case "Toe Ring":
-                const toeRings = await toeRing.find({});
-                if (!toeRings) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: toeRings })
-
-            case "Bracelet":
-                const braceletItem = await bracelet.find({});
-                if (!braceletItem) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: braceletItem })
-
-            case "Necklace":
-                const necklaceItem = await necklace.find({});
-                if (!necklaceItem) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: necklaceItem })
-
-            case "Nepali":
-                const nepaliItem = await nepali.find({});
-                if (!nepaliItem) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: nepaliItem })
-
-            case "Combo":
-                const comboItem = await combo.find({});
-                if (!comboItem) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: comboItem })
-
-            case "Other":
-                const others = await other.find({});
-                if (!others) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: others })
-            
-            case "Featured":
-                const featuredProducts = await featured.find({});
-                if (!featuredProducts) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: featuredProducts });
-
-            case "Trending":
-                const trendingProducts = await trending.find({});
-                if (!trendingProducts) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: trendingProducts });
-
-            case "Top Seller":
-                const topSellerProducts = await topSeller.find({});
-                if (!topSellerProducts) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: topSellerProducts });
-
-            case "Latest":
-                const latestProducts = await latest.find({});
-                if (!latestProducts) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: latestProducts });
-
-            case "Exclusive":
-                const exclusiveProducts = await exclusive.find({});
-                const products = await other.find({});
-                const totalItem = exclusiveProducts.concat(products);
-                if (!exclusiveProducts || !products) return res.json({ status: 'database error' });
-                return res.json({ status: 'success', data: totalItem })
-
-            default:
-                return res.json({ status: 'not found' });
-        }
+        //then wrapping all products in an array ans sending it to the client
+        const product = {featured, exclusive, trending, topseller,
+        bracelet, fingerring, earring, necklace, toering, nepali, other,
+        combo, latest, blog};
+    
+        return res.json({ status: 'success', data: product });
+        
+    } catch (error) {
+        //send status error if something went wrong
+        return res.json({ status: 'error' })
     }
 })
 

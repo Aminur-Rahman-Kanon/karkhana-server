@@ -26,10 +26,11 @@ const products = {
 }
 
 const blog = {
+    category: String,
     img: String,
     title: String,
     date: String,
-    details: String
+    details: String,
 }
 
 const registerModel = mongoose.model('registeredUser', registerSchema);

@@ -15,19 +15,9 @@ const topSellerModel = require('../Schemas/schema').topSellerModel;
 const latestModel = require('../Schemas/schema').latestModel;
 const blogModel = require('../Schemas/schema').blogModel;
 const multer = require('multer');
-
 const firebase = require('firebase/app');
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBongj0o_QcFuEkJMfiqpT27Nyc-p7G7O4",
-    authDomain: "karkhana-c685d.firebaseapp.com",
-    projectId: "karkhana-c685d",
-    storageBucket: "karkhana-c685d.appspot.com",
-    messagingSenderId: "638258626182",
-    appId: "1:638258626182:web:82f844b473ce1133e7db07",
-    measurementId: "G-VW0WXX4VZB"
-};
+const firebaseConfig = require('../firebase_config/firebaseConfig');
 
 const upload = multer({ storage: multer.memoryStorage() })
 
@@ -65,7 +55,7 @@ router.post('/', upload.array('photo'), async (req, res) => {
             data['impression'] = 0;
             data['img'] = featuredImg;
 
-            await featuredModel.create(data).then(result => res.json({ status: `${data.name} success` })).catch(err => res.json({ status: 'failed' }));
+            await featuredModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "bracelet":
@@ -91,7 +81,7 @@ router.post('/', upload.array('photo'), async (req, res) => {
             data['rating'] = 0;
             data['impression'] = 0;
             data['img'] = braceletImg;
-            await braceletModel.create(data).then(result => res.json({ status: `${data.name} success` })).catch(err => res.json({ status: 'failed' }));
+            await braceletModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
 
         case "combo":
@@ -386,6 +376,10 @@ router.post('/', upload.array('photo'), async (req, res) => {
 
             await trendingModel.create(data).then(result => res.json({ status: 'success' })).catch(err => res.json({ status: 'failed' }));
             break;
+
+        case 'blog':
+            const { products } = await req.body;
+
 
         default:
             return res.json({ status: 'invalid request' })
