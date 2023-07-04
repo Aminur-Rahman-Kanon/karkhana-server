@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({origin: 'https://karkhana.onrender.com'}));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
