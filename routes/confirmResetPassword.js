@@ -15,7 +15,6 @@ router.post('/', async (req, res) => {
 
     try {
         const verify = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(verify);
         const encryptedPassword = await bcrypt.hash(password, 10);
         await registerModel.updateOne({
             _id: id

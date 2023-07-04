@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+//decalring mongoose schemas
 const registerSchema = {
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
@@ -12,6 +13,7 @@ const registerSchema = {
     address: String,
     zipcode: String,
     thana: String,
+    purchased: Object
 }
 
 const products = {

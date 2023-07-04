@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 const registerModel = require('../Schemas/schema').registerModel;
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const firebase = require('firebase/app');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+const firebaseConfig = require('../firebase_config/firebaseConfig');
 
-router.post('/' ,async (req, res) => {
+const upload = multer({ storage: multer.memoryStorage() });
+
+firebase.initializeApp(firebaseConfig);
+
+const storage = getStorage();
+
+router.post('/', upload.single('avatar') ,async (req, res) => {
 
     const userData = JSON.parse(req.body.data);
     const email = userData.email;
@@ -11,20 +21,25 @@ router.post('/' ,async (req, res) => {
     //Not necessary but maybe
     if (!email) return res.json({ status: 'email not provided' });
     
-    //change filename
-    if (req.files) {        
-        const { avatar } = req.files
-        const ext = avatar.name.split('.')[1];
-        if (/^avatar/.test(avatar.mimetype)) return res.json({ status: 'invalid file' });
+    //storing img to the firebase storage and generating a link
+    if (req.file) {
+        const metaData = {
+            contentType: req.file.mimetype
+        }
+
+        let imgLink = '';
         
-        avatar.mv(`public/assets/users/${userData.email}.${ext}`)
+        const storageRef = ref(storage, `users/${email}`);
+        const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metaData);
+
+        await getDownloadURL(snapshot.ref).then(link => imgLink = link).catch(err => console.log(err));
 
         // update the database with the img link
         await registerModel.collection.updateOne({
             email: email
         }, {
             $set: {
-                imgLink: userData.imgLink
+                imgLink: imgLink
             }
         }).then(result => console.log(result)).catch(err => console.log(err))
     }

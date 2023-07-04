@@ -1,3 +1,4 @@
+//firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBongj0o_QcFuEkJMfiqpT27Nyc-p7G7O4",
     authDomain: "karkhana-c685d.firebaseapp.com",
