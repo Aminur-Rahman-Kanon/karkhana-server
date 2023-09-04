@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-app.use(cors({origin: 'https://karkhana.onrender.com'}));
+app.use(cors({origin: ['https://karkhana.onrender.com', 'http://localhost:3000']}));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,11 +22,12 @@ const updateProfile = require('./routes/updateProfile');
 const updateRedirect = require('./routes/updateRedirect');
 const submitPayment = require('./routes/submitPayment');
 const updateUserProductsPurchase = require('./routes/updateUserProductsPurchase');
+const fetchProduct = require('./routes/fetchProduct');
 
 //routes
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
-app.use('/products', products);
+app.use('/products/:productId', products);
 app.use('/forgot-password', forgotPassword);
 app.use('/reset-password/:id/:token', resetPassword);
 app.use('/reset-password/:id/:token', confirmResetPassword);
@@ -34,6 +35,7 @@ app.use('/update-profile', updateProfile);
 app.use('/redirect-user', updateRedirect);
 app.use('/submit-payment', submitPayment);
 app.use('/update-user-purchased-item', updateUserProductsPurchase);
+app.use('/product/:category', fetchProduct);
 
 //establising database connection
 mongoose.connect(process.env.MONGO_URI, {

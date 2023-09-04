@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams:true });
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
@@ -21,33 +21,105 @@ const blogModel = require('../Schemas/schema').blogModel;
 
 
 router.get('/', async (req, res) => {
-    try {
-        //fetching all products one by one
-        const featured = await featuredModel.find({});
-        const exclusive = await exclusiveModel.find({});
-        const trending = await trendingModel.find({});
-        const topseller = await topSellerModel.find({});
-        const bracelet = await braceletModel.find({});
-        const fingerring = await fingerRingModel.find({});
-        const earring = await earRingModel.find({});
-        const toering = await toeRingModel.find({});
-        const necklace = await necklaceModel.find({});
-        const nepali = await nepaliModel.find({});
-        const other = await otherModel.find({});
-        const combo = await comboModel.find({});
-        const latest = await latestModel.find({});
-        const blog = await blogModel.find({})
-        
-        //then wrapping all products in an array ans sending it to the client
-        const product = {featured, exclusive, trending, topseller,
-        bracelet, fingerring, earring, necklace, toering, nepali, other,
-        combo, latest, blog};
+    const productId = req.params.productId;
+    console.log(productId);
+
+    switch (productId) {
+        case 'initial-products':
+            try {
+                const featured = await featuredModel.find({});
+                const exclusive = await exclusiveModel.find({});
+                const trending = await trendingModel.find({});
+                const topSeller = await topSellerModel.find({});
     
-        return res.json({ status: 'success', data: product });
+                const product = {featured, exclusive, trending, topSeller};
+                return res.status(200).json({ data: product });
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'bracelet':
+            try {
+                const product = await braceletModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'finger-ring':
+            try {
+                const product = await fingerRingModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
         
-    } catch (error) {
-        //send status error if something went wrong
-        return res.json({ status: 'error' })
+        case 'ear-ring':
+            try {
+                const product = await earRingModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+        
+        case 'toe-ring':
+            try {
+                const product = await toeRingModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+        
+        case 'necklace':
+            try {
+                const product = await necklaceModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'nepali':
+            try {
+                const product = await nepaliModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'others':
+            try {
+                const product = await otherModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'combo':
+            try {
+                const product = await comboModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'latest':
+            try {
+                const product = await latestModel.find({});
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        case 'finger-ring':
+            try {
+                const product = await blogModel.find({})
+                return res.status(200).json({ data: product })
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
+        default:
+            return res.status(400).json({ status: 'invalid request' });
     }
 })
 
