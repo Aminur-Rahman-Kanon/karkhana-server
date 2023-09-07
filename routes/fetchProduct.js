@@ -19,6 +19,19 @@ router.get('/', async (req, res) => {
     const { category } = req.params;
 
     switch (category) {
+        case 'initial-products':
+            try {
+                const featured = await featuredModel.find({});
+                const exclusive = await exclusiveModel.find({});
+                const trending = await trendingModel.find({});
+                const topSeller = await topSellerModel.find({});
+    
+                const product = {featured, exclusive, trending, topSeller};
+                return res.status(200).json({ data: product });
+            } catch (error) {
+                return res.status(400).json({ status: 'server error' })
+            }
+
         case 'featured':
             try {
                 const product = await featuredModel.find({});

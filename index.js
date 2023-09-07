@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 //imported route
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
-const products = require('./routes/products');
+// const products = require('./routes/products');
 const forgotPassword = require('./routes/forgotPassword');
 const resetPassword = require('./routes/resetPassword');
 const confirmResetPassword = require('./routes/confirmResetPassword');
@@ -27,7 +27,7 @@ const fetchProduct = require('./routes/fetchProduct');
 //routes
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
-app.use('/products/:productId', products);
+// app.use('/products/:productId', products);
 app.use('/forgot-password', forgotPassword);
 app.use('/reset-password/:id/:token', resetPassword);
 app.use('/reset-password/:id/:token', confirmResetPassword);
@@ -35,7 +35,7 @@ app.use('/update-profile', updateProfile);
 app.use('/redirect-user', updateRedirect);
 app.use('/submit-payment', submitPayment);
 app.use('/update-user-purchased-item', updateUserProductsPurchase);
-app.use('/product/:category', fetchProduct);
+app.use('/products/:category', fetchProduct);
 
 //establising database connection
 mongoose.connect(process.env.MONGO_URI, {
