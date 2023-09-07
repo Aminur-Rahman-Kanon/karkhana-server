@@ -99,7 +99,7 @@ router.get('/', async (req, res) => {
                 return res.status(400).json({ status: 'server error' })
             }
 
-        case 'others':
+        case 'other':
             try {
                 const product = await otherModel.find({});
                 return res.status(200).json({ data: product })
@@ -123,7 +123,7 @@ router.get('/', async (req, res) => {
                 return res.status(400).json({ status: 'server error' })
             }
 
-        case 'finger-ring':
+        case 'blog':
             try {
                 const product = await blogModel.find({})
                 return res.status(200).json({ data: product })
