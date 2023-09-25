@@ -1,19 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const featuredModel = require('../Schemas/schema').featuredModel;
-const exclusiveModel = require('../Schemas/schema').exclusiveModel;
-const trendingModel = require('../Schemas/schema').trendingModel;
-const topSellerModel = require('../Schemas/schema').topSellerModel;
-const braceletModel = require('../Schemas/schema').braceletModel;
-const fingerRingModel = require('../Schemas/schema').fingerRingsModel;
-const earRingModel = require('../Schemas/schema').earRingsModel;
-const necklaceModel = require('../Schemas/schema').necklaceModel;
-const toeRingModel = require('../Schemas/schema').toeRingsModel;
-const nepaliModel = require('../Schemas/schema').nepaliModel;
-const otherModel = require('../Schemas/schema').othersModel;
-const latestModel = require('../Schemas/schema').latestModel;
-const comboModel = require('../Schemas/schema').comboModel;
-const blogModel = require('../Schemas/schema').blogModel;
+const { featuredModel, exclusiveModel, trendingModel, topSellerModel, braceletModel, fingerRingsModel, earRingsModel,
+        necklaceModel, toeRingsModel, nepaliModel, othersModel, latestModel, comboModel, blogModel  } = require('../Schemas/schema');
 
 router.get('/', async (req, res) => {
     const { category } = req.params;
@@ -21,13 +9,24 @@ router.get('/', async (req, res) => {
     switch (category) {
         case 'initial-products':
             try {
-                const featured = await featuredModel.find({}).lean();
-                const exclusive = await exclusiveModel.find({}).lean();
-                const trending = await trendingModel.find({}).lean();
-                const topSeller = await topSellerModel.find({}).lean();
+                const product = {};
+                // const featured = await featuredModel.find({}).lean();
+                // const exclusive = await exclusiveModel.find({}).lean();
+                // const trending = await trendingModel.find({}).lean();
+                // const topSeller = await topSellerModel.find({}).lean();
+                return Promise.all([
+                    featuredModel.find({}).lean(),
+                    exclusiveModel.find({}).lean(),
+                    trendingModel.find({}).lean(),
+                    topSellerModel.find({}).lean()
+                ]).then(data => {
+                    product['featured'] = data[0];
+                    product['exclusive'] = data[1];
+                    product['trending'] = data[2];
+                    product['topSeller'] = data[3];
+                    return res.status(200).json({ data: product });
+                })
     
-                const product = {featured, exclusive, trending, topSeller};
-                return res.status(200).json({ data: product });
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
             }
@@ -74,7 +73,7 @@ router.get('/', async (req, res) => {
 
         case 'finger-ring':
             try {
-                const product = await fingerRingModel.find({}).lean();
+                const product = await fingerRingsModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -82,7 +81,7 @@ router.get('/', async (req, res) => {
         
         case 'ear-ring':
             try {
-                const product = await earRingModel.find({}).lean();
+                const product = await earRingsModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -90,7 +89,7 @@ router.get('/', async (req, res) => {
         
         case 'toe-ring':
             try {
-                const product = await toeRingModel.find({}).lean();
+                const product = await toeRingsModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -114,7 +113,7 @@ router.get('/', async (req, res) => {
 
         case 'other':
             try {
-                const product = await otherModel.find({}).lean();
+                const product = await othersModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
