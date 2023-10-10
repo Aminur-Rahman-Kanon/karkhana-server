@@ -25,17 +25,36 @@ router.get('/', async (req, res) => {
     console.log(productId);
 
     switch (productId) {
-        case 'initial-products':
+        case 'featured':
             try {
-                const featured = await featuredModel.find({});
-                const exclusive = await exclusiveModel.find({});
-                const trending = await trendingModel.find({});
-                const topSeller = await topSellerModel.find({});
-    
-                const product = {featured, exclusive, trending, topSeller};
-                return res.status(200).json({ data: product });
+                const featured = await featuredModel.find({}).lean();
+                return res.status(200).json({ data: featured });
             } catch (error) {
-                return res.status(400).json({ status: 'server error' })
+                return res.status(500);
+            }
+
+        case 'trending':
+            try {
+                const trending = await trendingModel.find({}).lean();
+                return res.status(200).json({ data: trending });
+            } catch (error) {
+                return res.status(500);
+            }
+
+        case 'top-seller':
+            try {
+                const topSeller = await topSellerModel.find({}).lean();
+                return res.status(200).json({ data: topSeller });
+            } catch (error) {
+                return res.status(500);
+            }
+
+        case 'exclusive':
+            try {
+                const exclusive = await exclusiveModel.find({}).lean();
+                return res.status(200).json({ data: exclusive });
+            } catch (error) {
+                return res.status(500);
             }
 
         case 'bracelet':

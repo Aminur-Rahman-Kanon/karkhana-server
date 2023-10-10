@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     switch (category) {
         case 'featured':
             try {
-                const product = await featuredModel.find({});
+                const product = await featuredModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 
         case 'exclusive':
             try {
-                const product = await exclusiveModel.find({});
+                const product = await exclusiveModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -37,15 +37,15 @@ router.get('/', async (req, res) => {
 
         case 'trending':
             try {
-                const product = await trendingModel.find({});
+                const product = await trendingModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
             }
         
-        case 'topseller':
+        case 'top-seller':
             try {
-                const product = await topSellerModel.find({});
+                const product = await topSellerModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 
         case 'bracelet':
             try {
-                const product = await braceletModel.find({});
+                const product = await braceletModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
 
         case 'finger-ring':
             try {
-                const product = await fingerRingModel.find({});
+                const product = await fingerRingModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
         
         case 'ear-ring':
             try {
-                const product = await earRingModel.find({});
+                const product = await earRingModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
         
         case 'toe-ring':
             try {
-                const product = await toeRingModel.find({});
+                const product = await toeRingModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -85,7 +85,7 @@ router.get('/', async (req, res) => {
         
         case 'necklace':
             try {
-                const product = await necklaceModel.find({});
+                const product = await necklaceModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -93,7 +93,7 @@ router.get('/', async (req, res) => {
 
         case 'nepali':
             try {
-                const product = await nepaliModel.find({});
+                const product = await nepaliModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -101,7 +101,7 @@ router.get('/', async (req, res) => {
 
         case 'others':
             try {
-                const product = await otherModel.find({});
+                const product = await otherModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -109,7 +109,7 @@ router.get('/', async (req, res) => {
 
         case 'combo':
             try {
-                const product = await comboModel.find({});
+                const product = await comboModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -117,7 +117,7 @@ router.get('/', async (req, res) => {
 
         case 'latest':
             try {
-                const product = await latestModel.find({});
+                const product = await latestModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
@@ -125,7 +125,7 @@ router.get('/', async (req, res) => {
 
         case 'finger-ring':
             try {
-                const product = await blogModel.find({})
+                const product = await blogModel.find({}).lean();
                 return res.status(200).json({ data: product })
             } catch (error) {
                 return res.status(400).json({ status: 'server error' })
