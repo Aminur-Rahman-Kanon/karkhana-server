@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { cronJobs } = require('./utilities/utilities')
 app.use(cors({origin: ['https://karkhana.onrender.com', 'http://localhost:3000']}));
 app.use(express.json());
 app.use(bodyParser.json());
@@ -25,6 +26,10 @@ const updateUserProductsPurchase = require('./routes/updateUserProductsPurchase'
 const fetchProduct = require('./routes/fetchProduct');
 
 //routes
+app.get('/', (req, res) => {
+    return res.status(200);
+})
+
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/products/:productId', products);
@@ -46,6 +51,9 @@ mongoose.connect(process.env.MONGO_URI, {
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('public'))
 }
+
+//defining a cronjobs to keep server awake
+cronJobs();
 
 //define a port for server to listening
 const port = process.env.PORT
