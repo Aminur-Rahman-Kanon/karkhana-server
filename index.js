@@ -53,11 +53,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //defining a cronjobs to keep server awake
-cronJobs();
 
 //define a port for server to listening
 const port = process.env.PORT
 app.listen(port || '8000', (err) => {
+    cronJobs();
     if (!err){
         console.log('server running on 8000')
     }
