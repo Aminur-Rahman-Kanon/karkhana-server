@@ -24,6 +24,7 @@ const updateRedirect = require('./routes/updateRedirect');
 const submitPayment = require('./routes/submitPayment');
 const updateUserProductsPurchase = require('./routes/updateUserProductsPurchase');
 const fetchProduct = require('./routes/fetchProduct');
+const blog = require('./routes/blog');
 
 //routes
 app.get('/', (req, res) => {
@@ -41,6 +42,7 @@ app.use('/redirect-user', updateRedirect);
 app.use('/submit-payment', submitPayment);
 app.use('/update-user-purchased-item', updateUserProductsPurchase);
 app.use('/product/:category', fetchProduct);
+app.use('/blog', blog);
 
 //establising database connection
 mongoose.connect(process.env.MONGO_URI, {
